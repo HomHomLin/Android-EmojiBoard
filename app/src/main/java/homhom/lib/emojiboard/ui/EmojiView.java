@@ -29,6 +29,8 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
 
     private ArrayList<Emoji> mEmojis;
 
+    private int mColumn;
+
     private EmojiViewAdapter mEmojiViewAdapter;
 
     public EmojiView(Context context) {
@@ -41,7 +43,7 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
 
     public EmojiView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        initEmojiView(context);
+//        initEmojiView(context);
     }
 
     public void initEmojiView(Context context){
@@ -49,7 +51,7 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
             mEmojiBoardFixer = EmojiBoardFixer.getInstance();
         }
         if(mGridLayoutManager == null){
-            mGridLayoutManager = new GridLayoutManager(context, mEmojiBoardFixer.getEmojiViewManager().getSpanCount());
+            mGridLayoutManager = new GridLayoutManager(context, mColumn);
         }
 
         if(mEmojiViewAdapter == null){
@@ -63,9 +65,12 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
         this.setAdapter(mEmojiViewAdapter);
     }
 
-    public void setEmojisInfo(int id , ArrayList<Emoji> list){
+    public void setEmojisInfo(Context context, int id , ArrayList<Emoji> list, int column){
         this.mId = id;
         this.mEmojis = list;
+        this.mColumn = column;
+
+        initEmojiView(context);
     }
 
     @Override

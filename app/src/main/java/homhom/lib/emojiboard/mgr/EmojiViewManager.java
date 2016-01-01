@@ -60,10 +60,12 @@ public class EmojiViewManager extends BaseManager{
     }
 
 
+    @Deprecated
     public void setSpanCount(int spanCount){
         this.mSpanCount = spanCount;
     }
 
+    @Deprecated
     public int getSpanCount(){
         return this.mSpanCount;
     }

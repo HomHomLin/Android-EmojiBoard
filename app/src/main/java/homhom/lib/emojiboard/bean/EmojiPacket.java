@@ -5,9 +5,9 @@ import java.util.ArrayList;
 /**
  * Created by linhonghong on 2015/12/31.
  */
-public class EmojiPacket implements BaseBean{
+public class EmojiPacket extends BaseBean{
 
-    public int mId;
+    public int mColumn;//表情所展现的列数
 
     public String mPacketName;//表情包名字
 
@@ -16,6 +16,7 @@ public class EmojiPacket implements BaseBean{
     public ArrayList<Emoji> mEmojis;//表情
 
     public EmojiPacket(){
+        mColumn = 5;//default
         mId = 0;
         mPacketName = "";
         mPacketIcon = "";
@@ -26,6 +27,7 @@ public class EmojiPacket implements BaseBean{
 
     @Override
     public void release() {
+        mColumn = 0;
         mId = 0;
         mPacketName = null;
         mPacketIcon = null;

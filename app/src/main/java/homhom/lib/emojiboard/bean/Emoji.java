@@ -3,10 +3,7 @@ package homhom.lib.emojiboard.bean;
 /**
  * Created by linhonghong on 2015/12/31.
  */
-public class Emoji implements BaseBean{
-
-    //Emoji id;
-    public int mId;
+public class Emoji extends BaseBean{
 
     //Emoji name
     public String mName;

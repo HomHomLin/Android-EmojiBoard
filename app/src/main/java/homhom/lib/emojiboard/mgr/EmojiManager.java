@@ -2,6 +2,7 @@ package homhom.lib.emojiboard.mgr;
 
 import java.util.ArrayList;
 
+import homhom.lib.emojiboard.R;
 import homhom.lib.emojiboard.bean.Emoji;
 import homhom.lib.emojiboard.bean.EmojiPacket;
 
@@ -11,6 +12,10 @@ import homhom.lib.emojiboard.bean.EmojiPacket;
 public class EmojiManager extends BaseManager{
 
     private static EmojiManager mEmojiManager;
+
+    public static final int TAG_DELETE_EMOJI = -1;
+
+    private int mDeleteEmojiRescouce;
 
     private ArrayList<EmojiPacket> mEmojiPackets;//用于存放读取的Emoji包
 
@@ -42,6 +47,8 @@ public class EmojiManager extends BaseManager{
         if(mEmojiDataChangerListeners == null){
             mEmojiDataChangerListeners = new ArrayList<EmojiDataChangerListener>();
         }
+
+        this.mDeleteEmojiRescouce = R.mipmap.emoji_backspace;
 
     }
 
@@ -85,8 +92,16 @@ public class EmojiManager extends BaseManager{
     }
 
     public void unregisterChangeListener(EmojiDataChangerListener listener){
-        if(mEmojiDataChangerListeners != null){
+        if(mEmojiDataChangerListeners != null) {
             mEmojiDataChangerListeners.remove(listener);
         }
+    }
+
+    public void setDeleteEmojiResouce(int res){
+        this.mDeleteEmojiRescouce = res;
+    }
+
+    public int getDeleteEmojiResouce(){
+        return this.mDeleteEmojiRescouce;
     }
 }
