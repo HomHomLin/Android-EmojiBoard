@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         emojiPacket.mColumn = 5;
         emojiPacket.mId = 1;
         ArrayList<Emoji> list = new ArrayList<>();
-        for(int i = 0; i < 25; i ++demodedemsj){
+        for(int i = 0; i < 25; i ++){
             Emoji emoji = new Emoji();
             emoji.mId = i;
             list.add(emoji);
