@@ -10,6 +10,8 @@ public class EmojiViewManager extends BaseManager{
 
     private int mSpanCount = 5;//defalut = 5
 
+    private int mBoardWidth,mBoardHeight;//面板的高度和宽度
+
     private boolean mHasFixSize = true;
 
     public EmojiViewManager(){
@@ -26,6 +28,27 @@ public class EmojiViewManager extends BaseManager{
     @Override
     public void onCreate() {
 
+    }
+
+    public void setBoradSize(int width, int height){
+        this.mBoardHeight = height;
+        this.mBoardWidth = width;
+    }
+
+    public void setBoardWidth(int width){
+        this.mBoardWidth = width;
+    }
+
+    public void setBoardHeight(int height){
+        this.mBoardHeight = height;
+    }
+
+    public int getBoardWidth(){
+        return this.mBoardWidth;
+    }
+
+    public int getBoardHeight(){
+        return this.mBoardHeight;
     }
 
     public void setHasFixedSize(boolean hasFixedSize){
