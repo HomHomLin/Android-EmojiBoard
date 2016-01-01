@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import homhom.lib.emojiboard.R;
 import homhom.lib.emojiboard.bean.Emoji;
@@ -27,7 +28,7 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
 
     private int mId;
 
-    private ArrayList<Emoji> mEmojis;
+    private List<Emoji> mEmojis;
 
     private int mColumn;
 
@@ -46,7 +47,7 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
 //        initEmojiView(context);
     }
 
-    public void initEmojiView(Context context){
+    private void initEmojiView(Context context){
         if(mEmojiBoardFixer == null){
             mEmojiBoardFixer = EmojiBoardFixer.getInstance();
         }
@@ -65,7 +66,7 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
         this.setAdapter(mEmojiViewAdapter);
     }
 
-    public void setEmojisInfo(Context context, int id , ArrayList<Emoji> list, int column){
+    public void setEmojisInfo(Context context, int id , List<Emoji> list, int column){
         this.mId = id;
         this.mEmojis = list;
         this.mColumn = column;

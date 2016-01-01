@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import homhom.lib.emojiboard.bean.Emoji;
 import homhom.lib.emojiboard.bean.EmojiPacket;
@@ -17,7 +19,8 @@ import homhom.lib.emojiboard.util.EmojiPacketUtil;
 /**
  * Created by Linhh on 16/1/1.
  */
-public class EmojiViewPager extends BaseViewPager implements ViewTreeObserver.OnGlobalLayoutListener{
+public class EmojiViewPager extends BaseViewPager
+        implements ViewTreeObserver.OnGlobalLayoutListener{
 
     private ArrayList<EmojiView> mEmojiViews;
     private EmojiPacket mEmojiPacket;
@@ -26,6 +29,8 @@ public class EmojiViewPager extends BaseViewPager implements ViewTreeObserver.On
     private int mPagerSize;
     private int mPagerItemSize;//内部每个pager的item数量
     private EmojiViewPagerAdapter mAdapter;
+    private HashMap<Integer, List<Emoji>> mViewPagerDataList;
+    private Context mContext;
 
     public EmojiViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -37,8 +42,17 @@ public class EmojiViewPager extends BaseViewPager implements ViewTreeObserver.On
     }
 
     public void initEmojiViewPager(Context context){
+        this.mContext = context;
         if(mEmojiViews == null){
             mEmojiViews = new ArrayList<>();
+        }
+
+        if(mViewPagerDataList == null){
+            mViewPagerDataList = new HashMap<>();
+        }
+
+        if(mAdapter == null){
+            mAdapter = new EmojiViewPagerAdapter();
         }
 
         addOnGlobalLayoutListener();
@@ -62,6 +76,15 @@ public class EmojiViewPager extends BaseViewPager implements ViewTreeObserver.On
 
     public void setEmojiPacket(EmojiPacket emojipacket){
         this.mEmojiPacket = emojipacket;
+        if(this.getMeasuredHeight() == 0){
+            //this view is not init
+            return;
+        }
+
+        calEmojiPacket(getEmojiPacket());
+
+        setupEmojiViewPager();
+
     }
 
     /**
@@ -85,6 +108,42 @@ public class EmojiViewPager extends BaseViewPager implements ViewTreeObserver.On
         this.setOffscreenPageLimit(this.mPagerSize);
     }
 
+    //thinking about doing in background
+    private void setupEmojiViewPager(){
+
+        if(mViewPagerDataList != null) {
+            mViewPagerDataList.clear();
+        }
+
+        if(mEmojiViews != null){
+            mEmojiViews.clear();
+        }
+
+        for(int i = 0 ; i < this.mPagerSize; i ++){
+            int start = i * mPagerItemSize;
+            int end = start + mPagerItemSize - 1;
+            if(start >= mEmojiPacket.mEmojis.size()){
+                //如果起始比原来的所有数据都要大，说明出错了
+                break;
+            }
+            if(end >= mEmojiPacket.mEmojis.size()){
+                end = mEmojiPacket.mEmojis.size() - 1;
+            }
+
+            EmojiView emojiView = new EmojiView(mContext);
+            emojiView.setLayoutParams(
+                    new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT));
+
+            mEmojiViews.add(emojiView);
+
+            mViewPagerDataList.put(i, mEmojiPacket.mEmojis.subList(start, end));
+        }
+
+        this.setAdapter(mAdapter);
+    }
+
     @Override
     public void onGlobalLayout() {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
@@ -98,10 +157,16 @@ public class EmojiViewPager extends BaseViewPager implements ViewTreeObserver.On
                 getEmojiViewManager().
                 setBoradSize(this.getMeasuredWidth(), this.getMeasuredHeight());
 
+        if(getEmojiPacket() == null){
+            return;
+        }
+
         calEmojiPacket(getEmojiPacket());
+
+        setupEmojiViewPager();
     }
 
-    public void addOnGlobalLayoutListener(){
+    private void addOnGlobalLayoutListener(){
         this.getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
 
@@ -109,7 +174,7 @@ public class EmojiViewPager extends BaseViewPager implements ViewTreeObserver.On
 
         @Override
         public int getCount() {
-            return 0;
+            return mPagerSize;
         }
 
         @Override
@@ -137,6 +202,10 @@ public class EmojiViewPager extends BaseViewPager implements ViewTreeObserver.On
                 return null;
             }
             EmojiView emojiView = mEmojiViews.get(position);
+            emojiView.setEmojisInfo(mContext,
+                    mEmojiPacketId,
+                    mViewPagerDataList.get(position),
+                    mEmojiPacketColumn);
             container.addView(emojiView);
             return emojiView;
         }
