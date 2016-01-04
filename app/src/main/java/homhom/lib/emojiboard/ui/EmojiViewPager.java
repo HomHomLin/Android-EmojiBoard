@@ -3,6 +3,7 @@ package homhom.lib.emojiboard.ui;
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -106,6 +107,8 @@ public class EmojiViewPager extends BaseViewPager
         this.mPagerSize = emojiPacket.mEmojis.size() % this.mPagerItemSize == 0 ? preSize : preSize + 1;
 
         this.setOffscreenPageLimit(this.mPagerSize);
+
+        Log.i("EmojiViewPager","calEmojiPacket");
     }
 
     //thinking about doing in background
@@ -121,13 +124,13 @@ public class EmojiViewPager extends BaseViewPager
 
         for(int i = 0 ; i < this.mPagerSize; i ++){
             int start = i * mPagerItemSize;
-            int end = start + mPagerItemSize - 1;
+            int end = start + mPagerItemSize;
             if(start >= mEmojiPacket.mEmojis.size()){
                 //如果起始比原来的所有数据都要大，说明出错了
                 break;
             }
             if(end >= mEmojiPacket.mEmojis.size()){
-                end = mEmojiPacket.mEmojis.size() - 1;
+                end = mEmojiPacket.mEmojis.size();
             }
 
             EmojiView emojiView = new EmojiView(mContext);

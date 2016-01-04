@@ -7,8 +7,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import homhom.lib.emojiboard.R;
@@ -98,21 +98,31 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.mView.setImageResource(R.mipmap.ic_launcher);
+            if(position == mEmojis.size()){
+                //最后一个是delete
+                holder.mView.setImageResource(R.mipmap.emoji_backspace);
+                holder.mTextView.setText("-1");
+            }else{
+                holder.mView.setImageResource(R.mipmap.ic_launcher);
+                holder.mTextView.setText(mEmojis.get(position).mId + "");
+            }
+
         }
 
         @Override
         public int getItemCount() {
-            return mEmojis == null ? 0 : mEmojis.size();
+            return mEmojis == null ? 0 : mEmojis.size() + 1;
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder{
 
             private ImageView mView;
+            private TextView mTextView;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 mView = (ImageView)itemView.findViewById(R.id.iv_emoji);
+                mTextView = (TextView)itemView.findViewById(R.id.tv_emoji_id);
             }
         }
     }

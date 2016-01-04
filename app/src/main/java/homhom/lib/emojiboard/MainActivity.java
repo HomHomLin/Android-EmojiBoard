@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         EmojiViewPager emojiViewPager = (EmojiViewPager) findViewById(R.id.emojiView);
         EmojiPacket emojiPacket = new EmojiPacket();
-        emojiPacket.mColumn = 5;
+        emojiPacket.mColumn = 3;
         emojiPacket.mId = 1;
         ArrayList<Emoji> list = new ArrayList<>();
         for(int i = 0; i < 25; i ++){

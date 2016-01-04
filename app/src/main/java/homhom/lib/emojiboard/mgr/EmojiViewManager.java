@@ -1,5 +1,7 @@
 package homhom.lib.emojiboard.mgr;
 
+import android.util.Log;
+
 /**
  * 配置EmojiView的Mgr
  * Created by linhonghong on 2015/12/31.
@@ -33,6 +35,7 @@ public class EmojiViewManager extends BaseManager{
     public void setBoradSize(int width, int height){
         this.mBoardHeight = height;
         this.mBoardWidth = width;
+        Log.i(EmojiViewManager.class.getSimpleName(), this.mBoardHeight + ":" + this.mBoardWidth);
     }
 
     public void setBoardWidth(int width){
