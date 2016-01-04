@@ -19,12 +19,21 @@ public class EmojiPacketUtil {
         return line;
     }
 
-    public static int itemSizeInPager(int column){
+    public static int itemSizeInPagerPreWithDelete(int column){
 
         int line = splitGetLine(column);
 
         int itemSizeWithoutDelete = line * column;
 
         return itemSizeWithoutDelete - 1;
+    }
+
+    public static int itemSizeInPager(int column){
+
+        int line = splitGetLine(column);
+
+        int itemSizeWithoutDelete = line * column;
+
+        return itemSizeWithoutDelete;
     }
 }

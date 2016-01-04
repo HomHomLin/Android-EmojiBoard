@@ -30,6 +30,8 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
 
     private List<Emoji> mEmojis;
 
+    private boolean mShowDelete = true;
+
     private int mColumn;
 
     private EmojiViewAdapter mEmojiViewAdapter;
@@ -66,10 +68,11 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
         this.setAdapter(mEmojiViewAdapter);
     }
 
-    public void setEmojisInfo(Context context, int id , List<Emoji> list, int column){
+    public void setEmojisInfo(Context context, int id , List<Emoji> list, int column, boolean showDelete){
         this.mId = id;
         this.mEmojis = list;
         this.mColumn = column;
+        this.mShowDelete = showDelete;
 
         initEmojiView(context);
     }
@@ -98,7 +101,7 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            if(position == mEmojis.size()){
+            if(position == mEmojis.size() && mShowDelete){
                 //最后一个是delete
                 holder.mView.setImageResource(R.mipmap.emoji_backspace);
                 holder.mTextView.setText("-1");
@@ -111,7 +114,7 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
 
         @Override
         public int getItemCount() {
-            return mEmojis == null ? 0 : mEmojis.size() + 1;
+            return mEmojis == null ? 0 : (mShowDelete ? mEmojis.size() + 1: mEmojis.size());
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder{
@@ -121,6 +124,14 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
 
             public ViewHolder(View itemView) {
                 super(itemView);
+
+                ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT);
+                int size = EmojiBoardFixer.getInstance().getEmojiViewManager().getBoardWidth() / mColumn;
+                layoutParams.height = size;
+                layoutParams.width = size;
+                itemView.setLayoutParams(layoutParams);
+
                 mView = (ImageView)itemView.findViewById(R.id.iv_emoji);
                 mTextView = (TextView)itemView.findViewById(R.id.tv_emoji_id);
             }

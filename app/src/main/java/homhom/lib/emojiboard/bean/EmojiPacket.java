@@ -15,11 +15,14 @@ public class EmojiPacket extends BaseBean{
 
     public ArrayList<Emoji> mEmojis;//表情
 
+    public boolean mShowDelete;//显示删除？
+
     public EmojiPacket(){
         mColumn = 5;//default
         mId = 0;
         mPacketName = "";
         mPacketIcon = "";
+        mShowDelete = true;
         if(mEmojis == null){
             mEmojis = new ArrayList<>();
         }

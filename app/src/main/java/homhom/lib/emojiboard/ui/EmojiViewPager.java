@@ -29,6 +29,7 @@ public class EmojiViewPager extends BaseViewPager
     private int mEmojiPacketId;
     private int mPagerSize;
     private int mPagerItemSize;//内部每个pager的item数量
+    private boolean mShowDelete;
     private EmojiViewPagerAdapter mAdapter;
     private HashMap<Integer, List<Emoji>> mViewPagerDataList;
     private Context mContext;
@@ -96,11 +97,19 @@ public class EmojiViewPager extends BaseViewPager
         return this.mEmojiPacket;
     }
 
+    public boolean isShowDelete(){
+        return this.mShowDelete;
+    }
+
     private void calEmojiPacket(EmojiPacket emojiPacket){
         this.mEmojiPacketColumn = emojiPacket.mColumn;
         this.mEmojiPacketId = emojiPacket.mId;
 
-        this.mPagerItemSize = EmojiPacketUtil.itemSizeInPager(this.mEmojiPacketColumn);
+        this.mShowDelete = emojiPacket.mShowDelete;
+
+        this.mPagerItemSize = mShowDelete ?
+                EmojiPacketUtil.itemSizeInPagerPreWithDelete(this.mEmojiPacketColumn) :
+                EmojiPacketUtil.itemSizeInPager(this.mEmojiPacketColumn);
 
         //计算需要几个pager，并且设置对应的表情包list
         int preSize = emojiPacket.mEmojis.size() / this.mPagerItemSize;
@@ -108,7 +117,7 @@ public class EmojiViewPager extends BaseViewPager
 
         this.setOffscreenPageLimit(this.mPagerSize);
 
-        Log.i("EmojiViewPager","calEmojiPacket");
+        Log.i("EmojiViewPager", "calEmojiPacket");
     }
 
     //thinking about doing in background
@@ -206,9 +215,11 @@ public class EmojiViewPager extends BaseViewPager
             }
             EmojiView emojiView = mEmojiViews.get(position);
             emojiView.setEmojisInfo(mContext,
-                    mEmojiPacketId,
+                    getEmojiPacketId(),
                     mViewPagerDataList.get(position),
-                    mEmojiPacketColumn);
+                    getEmojiPacketColum(),
+                    isShowDelete()
+                    );
             container.addView(emojiView);
             return emojiView;
         }
