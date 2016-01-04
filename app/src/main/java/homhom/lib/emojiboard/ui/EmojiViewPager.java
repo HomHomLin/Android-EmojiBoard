@@ -33,6 +33,8 @@ public class EmojiViewPager extends BaseViewPager
     private EmojiViewPagerAdapter mAdapter;
     private HashMap<Integer, List<Emoji>> mViewPagerDataList;
     private Context mContext;
+    private OnEmojiViewPagerStatusListener mOnEmojiViewPagerStatusListener;
+    private EmojiOnPageChangeListener mOnPageChangeListener;
 
     public EmojiViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -40,10 +42,20 @@ public class EmojiViewPager extends BaseViewPager
     }
 
     public EmojiViewPager(Context context) {
-        super(context);
+        this(context, null);
+    }
+
+    public interface OnEmojiViewPagerStatusListener{
+        public void onInit();
+        public void onCalEmojiPacket();
+        public void onSetupEmojiViewPager();
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels);
+        public void onPageSelected(int position);
+        public void onPageScrollStateChanged(int state);
     }
 
     public void initEmojiViewPager(Context context){
+        Log.i("EmojiViewPager", "initEmojiViewpager");
         this.mContext = context;
         if(mEmojiViews == null){
             mEmojiViews = new ArrayList<>();
@@ -53,11 +65,24 @@ public class EmojiViewPager extends BaseViewPager
             mViewPagerDataList = new HashMap<>();
         }
 
+        if(mOnPageChangeListener == null){
+            mOnPageChangeListener = new EmojiOnPageChangeListener();
+        }
+
         if(mAdapter == null){
             mAdapter = new EmojiViewPagerAdapter();
         }
 
         addOnGlobalLayoutListener();
+
+        if(this.mOnEmojiViewPagerStatusListener != null){
+            //call init
+            this.mOnEmojiViewPagerStatusListener.onInit();
+        }
+    }
+
+    public void setOnEmojiViewPagerStatusListener(OnEmojiViewPagerStatusListener listener){
+        this.mOnEmojiViewPagerStatusListener = listener;
     }
 
     public int getEmojiPacketColum(){
@@ -74,6 +99,14 @@ public class EmojiViewPager extends BaseViewPager
      */
     public int getPagerItemSize(){
         return this.mPagerItemSize;
+    }
+
+    /**
+     * 获得该viewpager下的pager页数
+     * @return
+     */
+    public int getPagerSize(){
+        return this.mPagerSize;
     }
 
     public void setEmojiPacket(EmojiPacket emojipacket){
@@ -117,6 +150,11 @@ public class EmojiViewPager extends BaseViewPager
 
         this.setOffscreenPageLimit(this.mPagerSize);
 
+        if(this.mOnEmojiViewPagerStatusListener != null){
+            //now you can get almost info from this view pager
+            this.mOnEmojiViewPagerStatusListener.onCalEmojiPacket();
+        }
+
         Log.i("EmojiViewPager", "calEmojiPacket");
     }
 
@@ -154,6 +192,13 @@ public class EmojiViewPager extends BaseViewPager
         }
 
         this.setAdapter(mAdapter);
+
+        this.addOnPageChangeListener(mOnPageChangeListener);
+
+        if(this.mOnEmojiViewPagerStatusListener != null){
+            //now you can get all info from this view pager
+            this.mOnEmojiViewPagerStatusListener.onSetupEmojiViewPager();
+        }
     }
 
     @Override
@@ -180,6 +225,30 @@ public class EmojiViewPager extends BaseViewPager
 
     private void addOnGlobalLayoutListener(){
         this.getViewTreeObserver().addOnGlobalLayoutListener(this);
+    }
+
+    private class EmojiOnPageChangeListener implements OnPageChangeListener{
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            if(mOnEmojiViewPagerStatusListener != null){
+                mOnEmojiViewPagerStatusListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            if(mOnEmojiViewPagerStatusListener != null){
+                mOnEmojiViewPagerStatusListener.onPageSelected(position);
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            if(mOnEmojiViewPagerStatusListener != null){
+                mOnEmojiViewPagerStatusListener.onPageScrollStateChanged(state);
+            }
+        }
     }
 
     public class EmojiViewPagerAdapter extends PagerAdapter{

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import homhom.lib.emojiboard.bean.Emoji;
 import homhom.lib.emojiboard.bean.EmojiPacket;
+import homhom.lib.emojiboard.ui.EmojiInterBoard;
 import homhom.lib.emojiboard.ui.EmojiViewPager;
 
 public class MainActivity extends AppCompatActivity {
@@ -15,7 +16,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        EmojiViewPager emojiViewPager = (EmojiViewPager) findViewById(R.id.emojiView);
+        EmojiInterBoard emojiViewPager = (EmojiInterBoard) findViewById(R.id.emojiView);
         EmojiPacket emojiPacket = new EmojiPacket();
         emojiPacket.mColumn = 4;
         emojiPacket.mId = 1;
