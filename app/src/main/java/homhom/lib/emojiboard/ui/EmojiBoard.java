@@ -110,6 +110,8 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
 
         setupEmojiViewPager();
 
+//        mEmojiPagerBoard.setNoFocus(true);//如果内部的view的页数大于 1 页，静止滑动
+
         mIsAddEmojiPagerBoard = true;
 
         RelativeLayout.LayoutParams layoutParams =
@@ -196,6 +198,9 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
                 //没有得到pagesize
             }else{
                 mPagerSize = pageSize;
+//                if(mPagerSize > 1) {
+//                    mEmojiPagerBoard.setNoFocus(true);//如果内部的view的页数大于 1 页，静止滑动
+//                }
                 //显示indicator
                 setupEmojiIndicator();
                 updateIndicatorStatus(mCurrentItem, getViewPagerCurrentItem(mCurrentItem));
@@ -206,6 +211,12 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
         public void onPageScrollStateChanged(int state) {
 
         }
+    }
+
+    private void setEmojiViewBoardFocusable(boolean abled){
+//        if(mEmojiPagerBoard != null){
+//            mEmojiPagerBoard.setNoFocus(abled);//如果内部的view的页数大于 1 页，静止滑动
+//        }
     }
 
     public void updateIndicatorStatus(int pagerId, int position){
@@ -237,7 +248,11 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
     @Override
     public void onCalEmojiPacket(int pagerId) {
         if(pagerId == 0){
+            //第一页初始化完成的回调
             mPagerSize = getViewPagerPageSize(pagerId);
+//            if(mPagerSize > 1) {
+//                mEmojiPagerBoard.setNoFocus(true);//如果内部的view的页数大于 1 页，静止滑动
+//            }
             setupEmojiIndicator();
         }
 //        if(mEmojiViewPager != null){
@@ -259,6 +274,14 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
     @Override
     public void onPageSelected(int pagerId ,int position) {
         updateIndicatorStatus(pagerId,position);
+        //如果内部滑动到第一页和最后一页，开启外部滑动，佛则关闭外部滑动
+        if(position == 0 || position == (getViewPagerPageSize(pagerId) - 1)){
+            //开启
+            setEmojiViewBoardFocusable(false);
+        }else{
+            //禁用
+            setEmojiViewBoardFocusable(true);
+        }
     }
 
     @Override
