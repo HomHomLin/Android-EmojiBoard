@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import homhom.lib.emojiboard.R;
 import homhom.lib.emojiboard.bean.EmojiPacket;
@@ -64,11 +65,25 @@ public class EmojiInterBoard extends RelativeLayout implements EmojiViewPager.On
 
     private void setupEmojiIndicator(){
         if(mIndicatorLayout != null){
+            LinearLayout.LayoutParams layoutParams =
+                    new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.WRAP_CONTENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT);
+            int margin = mContext.getResources().getDimensionPixelSize(R.dimen.emoji_indicator_iv_margin);
+            layoutParams.setMargins(
+                    margin,
+                    margin,
+                    margin,
+                    margin);
             mIndicatorLayout.removeAllViews();
             for(int i = 0 ; i < mPagerSize; i ++){
-                ImageView ivIndicator = new ImageView(mContext);
-                ivIndicator.setImageResource(R.mipmap.emoji_default_indicator_unmark);
-                mIndicatorLayout.addView(ivIndicator);
+                ImageView indicator = new ImageView(mContext);
+                if(i == 0){
+                    indicator.setImageResource(R.mipmap.emoji_default_indicator_mark);
+                }else {
+                    indicator.setImageResource(R.mipmap.emoji_default_indicator_unmark);
+                }
+                mIndicatorLayout.addView(indicator, layoutParams);
             }
         }
     }
@@ -149,7 +164,19 @@ public class EmojiInterBoard extends RelativeLayout implements EmojiViewPager.On
 
     @Override
     public void onPageSelected(int position) {
+        if(mIndicatorLayout != null){
+            for(int i = 0 ; i < mIndicatorLayout.getChildCount(); i ++){
+                ImageView indicator = (ImageView)mIndicatorLayout.getChildAt(i);
+                if(indicator != null){
+                    if(i == position){
+                        indicator.setImageResource(R.mipmap.emoji_default_indicator_mark);
+                    }else {
+                        indicator.setImageResource(R.mipmap.emoji_default_indicator_unmark);
+                    }
+                }
+            }
 
+        }
     }
 
     @Override
