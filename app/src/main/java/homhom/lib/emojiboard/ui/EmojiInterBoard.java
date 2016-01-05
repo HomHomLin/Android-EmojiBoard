@@ -2,6 +2,7 @@ package homhom.lib.emojiboard.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -164,6 +165,7 @@ public class EmojiInterBoard extends RelativeLayout implements EmojiViewPager.On
 
     @Override
     public void onPageSelected(int position) {
+        Log.i("EmojiInterBoard","onPageSelected:" + position);
         if(mIndicatorLayout != null){
             for(int i = 0 ; i < mIndicatorLayout.getChildCount(); i ++){
                 ImageView indicator = (ImageView)mIndicatorLayout.getChildAt(i);

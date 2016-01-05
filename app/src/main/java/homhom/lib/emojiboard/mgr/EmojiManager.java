@@ -76,6 +76,10 @@ public class EmojiManager extends BaseManager{
         notifyDataSetChanged(packet.mId);
     }
 
+    public ArrayList<EmojiPacket> getEmojiPackets(){
+        return this.mEmojiPackets;
+    }
+
     private void notifyDataSetChanged(int id){
         if(mEmojiDataChangerListeners == null){
             return;

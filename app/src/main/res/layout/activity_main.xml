@@ -5,10 +5,10 @@
     android:background="#000000"
     tools:context=".MainActivity">
 
-    <homhom.lib.emojiboard.ui.EmojiInterBoard
+    <homhom.lib.emojiboard.ui.EmojiBoard
         android:id="@+id/emojiView"
         android:layout_width="match_parent"
-        android:layout_height="180dp">
+        android:layout_height="200dp">
 
-    </homhom.lib.emojiboard.ui.EmojiInterBoard>
+    </homhom.lib.emojiboard.ui.EmojiBoard>
 </RelativeLayout>

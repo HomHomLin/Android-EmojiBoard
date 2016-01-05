@@ -23,7 +23,7 @@ import homhom.lib.emojiboard.util.EmojiPacketUtil;
 public class EmojiViewPager extends BaseViewPager
         implements ViewTreeObserver.OnGlobalLayoutListener{
 
-    private ArrayList<EmojiView> mEmojiViews;
+//    private ArrayList<EmojiView> mEmojiViews;
     private EmojiPacket mEmojiPacket;
     private int mEmojiPacketColumn;
     private int mEmojiPacketId;
@@ -57,9 +57,9 @@ public class EmojiViewPager extends BaseViewPager
     public void initEmojiViewPager(Context context){
         Log.i("EmojiViewPager", "initEmojiViewpager");
         this.mContext = context;
-        if(mEmojiViews == null){
-            mEmojiViews = new ArrayList<>();
-        }
+//        if(mEmojiViews == null){
+//            mEmojiViews = new ArrayList<>();
+//        }
 
         if(mViewPagerDataList == null){
             mViewPagerDataList = new HashMap<>();
@@ -165,9 +165,9 @@ public class EmojiViewPager extends BaseViewPager
             mViewPagerDataList.clear();
         }
 
-        if(mEmojiViews != null){
-            mEmojiViews.clear();
-        }
+//        if(mEmojiViews != null){
+//            mEmojiViews.clear();
+//        }
 
         for(int i = 0 ; i < this.mPagerSize; i ++){
             int start = i * mPagerItemSize;
@@ -180,13 +180,13 @@ public class EmojiViewPager extends BaseViewPager
                 end = mEmojiPacket.mEmojis.size();
             }
 
-            EmojiView emojiView = new EmojiView(mContext);
-            emojiView.setLayoutParams(
-                    new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.MATCH_PARENT));
-
-            mEmojiViews.add(emojiView);
+//            EmojiView emojiView = new EmojiView(mContext);
+//            emojiView.setLayoutParams(
+//                    new ViewGroup.LayoutParams(
+//                            ViewGroup.LayoutParams.MATCH_PARENT,
+//                            ViewGroup.LayoutParams.MATCH_PARENT));
+//
+//            mEmojiViews.add(emojiView);
 
             mViewPagerDataList.put(i, mEmojiPacket.mEmojis.subList(start, end));
         }
@@ -251,7 +251,7 @@ public class EmojiViewPager extends BaseViewPager
         }
     }
 
-    public class EmojiViewPagerAdapter extends PagerAdapter{
+    class EmojiViewPagerAdapter extends PagerAdapter{
 
         @Override
         public int getCount() {
@@ -265,31 +265,40 @@ public class EmojiViewPager extends BaseViewPager
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            if(mEmojiViews == null){
+            if(object == null){
                 return;
             }
-            if(position >= mEmojiViews.size()){
-                return;
-            }
-            container.removeView(mEmojiViews.get(position));
+//            if(position >= mEmojiViews.size()){
+//                return;
+//            }
+            container.removeView((EmojiView)object);
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            if(mEmojiViews == null){
-                return null;
-            }
-            if(position >= mEmojiViews.size()){
-                return null;
-            }
-            EmojiView emojiView = mEmojiViews.get(position);
+//            if(mEmojiViews == null){
+//                return null;
+//            }
+//            if(position >= mEmojiViews.size()){
+//                return null;
+//            }
+//            EmojiView emojiView = mEmojiViews.get(position);
+            EmojiView emojiView = new EmojiView(mContext);
+
             emojiView.setEmojisInfo(mContext,
                     getEmojiPacketId(),
                     mViewPagerDataList.get(position),
                     getEmojiPacketColum(),
                     isShowDelete()
                     );
+
+            emojiView.setLayoutParams(
+                    new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.MATCH_PARENT));
+
             container.addView(emojiView);
+
             return emojiView;
         }
     }
