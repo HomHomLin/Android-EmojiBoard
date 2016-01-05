@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,6 +23,7 @@ public class EmojiViewPager extends BaseViewPager
         implements ViewTreeObserver.OnGlobalLayoutListener{
 
 //    private ArrayList<EmojiView> mEmojiViews;
+    private int mPagerId;
     private EmojiPacket mEmojiPacket;
     private int mEmojiPacketColumn;
     private int mEmojiPacketId;
@@ -46,12 +46,12 @@ public class EmojiViewPager extends BaseViewPager
     }
 
     public interface OnEmojiViewPagerStatusListener{
-        public void onInit();
-        public void onCalEmojiPacket();
-        public void onSetupEmojiViewPager();
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels);
-        public void onPageSelected(int position);
-        public void onPageScrollStateChanged(int state);
+        public void onInit(int pageId);
+        public void onCalEmojiPacket(int pageId);
+        public void onSetupEmojiViewPager(int pageId);
+        public void onPageScrolled(int pageId, int position, float positionOffset, int positionOffsetPixels);
+        public void onPageSelected(int pageId, int position);
+        public void onPageScrollStateChanged(int pageId, int state);
     }
 
     public void initEmojiViewPager(Context context){
@@ -77,7 +77,7 @@ public class EmojiViewPager extends BaseViewPager
 
         if(this.mOnEmojiViewPagerStatusListener != null){
             //call init
-            this.mOnEmojiViewPagerStatusListener.onInit();
+            this.mOnEmojiViewPagerStatusListener.onInit(getPagerId());
         }
     }
 
@@ -107,6 +107,14 @@ public class EmojiViewPager extends BaseViewPager
      */
     public int getPagerSize(){
         return this.mPagerSize;
+    }
+
+    public int getPagerId(){
+        return this.mPagerId;
+    }
+
+    public void setPagerId(int id){
+        this.mPagerId = id;
     }
 
     public void setEmojiPacket(EmojiPacket emojipacket){
@@ -152,7 +160,7 @@ public class EmojiViewPager extends BaseViewPager
 
         if(this.mOnEmojiViewPagerStatusListener != null){
             //now you can get almost info from this view pager
-            this.mOnEmojiViewPagerStatusListener.onCalEmojiPacket();
+            this.mOnEmojiViewPagerStatusListener.onCalEmojiPacket(getPagerId());
         }
 
         Log.i("EmojiViewPager", "calEmojiPacket");
@@ -197,7 +205,7 @@ public class EmojiViewPager extends BaseViewPager
 
         if(this.mOnEmojiViewPagerStatusListener != null){
             //now you can get all info from this view pager
-            this.mOnEmojiViewPagerStatusListener.onSetupEmojiViewPager();
+            this.mOnEmojiViewPagerStatusListener.onSetupEmojiViewPager(getPagerId());
         }
     }
 
@@ -232,21 +240,21 @@ public class EmojiViewPager extends BaseViewPager
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             if(mOnEmojiViewPagerStatusListener != null){
-                mOnEmojiViewPagerStatusListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                mOnEmojiViewPagerStatusListener.onPageScrolled(getPagerId(), position, positionOffset, positionOffsetPixels);
             }
         }
 
         @Override
         public void onPageSelected(int position) {
             if(mOnEmojiViewPagerStatusListener != null){
-                mOnEmojiViewPagerStatusListener.onPageSelected(position);
+                mOnEmojiViewPagerStatusListener.onPageSelected(getPagerId() ,position);
             }
         }
 
         @Override
         public void onPageScrollStateChanged(int state) {
             if(mOnEmojiViewPagerStatusListener != null){
-                mOnEmojiViewPagerStatusListener.onPageScrollStateChanged(state);
+                mOnEmojiViewPagerStatusListener.onPageScrollStateChanged(getPagerId() ,state);
             }
         }
     }

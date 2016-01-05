@@ -3,7 +3,6 @@ package homhom.lib.emojiboard.mgr;
 import java.util.ArrayList;
 
 import homhom.lib.emojiboard.R;
-import homhom.lib.emojiboard.bean.Emoji;
 import homhom.lib.emojiboard.bean.EmojiPacket;
 
 /**

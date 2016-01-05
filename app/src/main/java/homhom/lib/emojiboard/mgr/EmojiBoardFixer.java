@@ -1,7 +1,5 @@
 package homhom.lib.emojiboard.mgr;
 
-import java.util.ArrayList;
-
 /**
  * Created by linhonghong on 2015/12/31.
  */

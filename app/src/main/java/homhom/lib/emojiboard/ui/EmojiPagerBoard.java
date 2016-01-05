@@ -1,0 +1,151 @@
+package homhom.lib.emojiboard.ui;
+
+import android.content.Context;
+import android.support.v4.view.PagerAdapter;
+import android.util.AttributeSet;
+import android.view.View;
+import android.view.ViewGroup;
+
+import java.util.ArrayList;
+
+import homhom.lib.emojiboard.bean.EmojiPacket;
+import homhom.lib.emojiboard.mgr.EmojiBoardFixer;
+
+/**
+ * Created by linhonghong on 2016/1/5.
+ */
+public class EmojiPagerBoard extends BaseViewPager{
+
+    private ArrayList<EmojiPacket> mEmojiPackets;
+
+    private int mBoardPagerSize;
+
+    private Context mContext;
+
+    private EmojiPagerBoardAdapter mEmojiPagerBoardAdapter;
+
+    private ArrayList<EmojiViewPager> mEmojiViewPagers;
+
+    private EmojiViewPager.OnEmojiViewPagerStatusListener mOnEmojiViewPagerStatusListener;
+
+    public EmojiPagerBoard(Context context) {
+        this(context, null);
+    }
+
+    public EmojiPagerBoard(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        initEmojiBoard(context);
+    }
+
+    public void initEmojiBoard(Context context){
+
+        mContext = context;
+
+        if(mEmojiViewPagers == null){
+            mEmojiViewPagers = new ArrayList<>();
+        }
+
+        mEmojiPackets = EmojiBoardFixer.getInstance().getEmojiManager().getEmojiPackets();
+
+        setupEmojiBoard(mEmojiPackets);
+    }
+
+    public void setOnEmojiViewPagerStatusListener(EmojiViewPager.OnEmojiViewPagerStatusListener listener){
+        this.mOnEmojiViewPagerStatusListener = listener;
+    }
+
+    public EmojiViewPager getEmojiViewPager(int pagerId){
+        if(mEmojiViewPagers == null){
+            return null;
+        }
+        return mEmojiViewPagers.get(pagerId);
+    }
+
+    public void setupEmojiBoard(ArrayList<EmojiPacket> emojiPackets){
+
+        this.mEmojiPackets = emojiPackets;
+
+        if(mEmojiPackets != null){
+            mBoardPagerSize = mEmojiPackets.size();
+        }else{
+            mBoardPagerSize = 0;
+        }
+
+        ViewGroup.LayoutParams layoutParams =
+                new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT);
+
+        for(int i = 0 ; i < mBoardPagerSize; i ++){
+            EmojiViewPager emojiViewPager = new EmojiViewPager(mContext);
+
+            emojiViewPager.setPagerId(i);
+
+            emojiViewPager.setOnEmojiViewPagerStatusListener(mOnEmojiViewPagerStatusListener);
+
+            emojiViewPager.setLayoutParams(layoutParams);
+
+            mEmojiViewPagers.add(emojiViewPager);
+
+        }
+
+        if(mEmojiPagerBoardAdapter == null){
+            mEmojiPagerBoardAdapter = new EmojiPagerBoardAdapter();
+            this.setAdapter(mEmojiPagerBoardAdapter);
+        }
+
+        this.setOffscreenPageLimit(mBoardPagerSize);
+    }
+
+    public void setEmojiPackets(ArrayList<EmojiPacket> emojiPackets){
+
+        setupEmojiBoard(emojiPackets);
+
+        mEmojiPagerBoardAdapter.notifyDataSetChanged();
+    }
+
+    class EmojiPagerBoardAdapter extends PagerAdapter{
+
+        @Override
+        public int getCount() {
+            return mEmojiViewPagers == null ? 0 : mEmojiViewPagers.size();
+        }
+
+        @Override
+        public boolean isViewFromObject(View view, Object object) {
+            return view == object;
+        }
+
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {
+
+            if(mEmojiViewPagers == null){
+                return null;
+            }
+            if(position >= mEmojiViewPagers.size()){
+                return null;
+            }
+
+            EmojiViewPager emojiViewPager = mEmojiViewPagers.get(position);
+
+            emojiViewPager.setEmojiPacket(mEmojiPackets.get(position));
+
+            container.addView(emojiViewPager);
+
+            return emojiViewPager;
+        }
+
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {
+            if(object == null){
+                return;
+            }
+
+            if(position >= mEmojiViewPagers.size()){
+                return;
+            }
+
+            container.removeView(mEmojiViewPagers.get(position));
+        }
+    }
+}
