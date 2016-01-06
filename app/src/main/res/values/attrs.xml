@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--psts-->
+    <declare-styleable name="EmojiBoardTab">
+        <attr name="tabIndicatorColor" format="color"/>
+        <attr name="tabUnderlineColor" format="color"/>
+        <attr name="tabDividerColor" format="color"/>
+        <attr name="tabTextSelectColor" format="color"/>
+        <attr name="tabIndicatorHeight" format="dimension"/>
+        <attr name="tabUnderlineHeight" format="dimension"/>
+        <attr name="tabDividerPadding" format="dimension"/>
+        <attr name="tabPaddingLeftRight" format="dimension"/>
+        <attr name="tabPaddingTopBottom" format="dimension"/>
+        <attr name="tabScrollOffset" format="dimension"/>
+        <attr name="tabBackground" format="reference"/>
+        <attr name="tabShouldExpand" format="boolean"/>
+        <attr name="tabTextAllCaps" format="boolean"/>
+        <attr name="tabDrawMode" format="enum">
+            <enum name="normal" value="0"/>
+            <enum name="text" value="1"/>
+        </attr>
+    </declare-styleable>
+
+</resources>

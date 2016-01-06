@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item type="id" name="emoji_view_pager_id">888</item>
+    <item type="id" name="emoji_view_pager_indicator_id">888</item>
+    <item type="id" name="emoji_view_pager_tab_id">666</item>
+    <item type="id" name="emoji_tab_position"></item>
 </resources>

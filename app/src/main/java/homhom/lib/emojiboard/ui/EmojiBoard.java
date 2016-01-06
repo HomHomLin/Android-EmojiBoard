@@ -74,6 +74,10 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
         }
     }
 
+    public EmojiPagerBoard getEmojiViewBoard(){
+        return this.mEmojiPagerBoard;
+    }
+
     private void setupEmojiIndicator(){
         if(mIndicatorLayout != null){
             LinearLayout.LayoutParams layoutParams =
@@ -142,7 +146,7 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
 
         mIndicatorLayout.setGravity(Gravity.CENTER);//内容居中
 
-        mIndicatorLayout.setId(R.id.emoji_view_pager_id);
+        mIndicatorLayout.setId(R.id.emoji_view_pager_indicator_id);
 
         RelativeLayout.LayoutParams layoutParams =
                 new RelativeLayout.LayoutParams(
