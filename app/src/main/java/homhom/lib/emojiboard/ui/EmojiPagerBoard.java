@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import homhom.lib.emojiboard.R;
 import homhom.lib.emojiboard.bean.EmojiPacket;
 import homhom.lib.emojiboard.mgr.EmojiBoardFixer;
 
@@ -27,6 +28,12 @@ public class EmojiPagerBoard extends BaseViewPager{
     private ArrayList<EmojiViewPager> mEmojiViewPagers;
 
     private EmojiViewPager.OnEmojiViewPagerStatusListener mOnEmojiViewPagerStatusListener;
+
+    private OnEmojiPagerBoardStatusListener mOnEmojiPagerBoardStatusListener;
+
+    public interface OnEmojiPagerBoardStatusListener{
+        public void onSetEmojiPacket();
+    }
 
     public EmojiPagerBoard(Context context) {
         this(context, null);
@@ -53,6 +60,11 @@ public class EmojiPagerBoard extends BaseViewPager{
     public void setOnEmojiViewPagerStatusListener(EmojiViewPager.OnEmojiViewPagerStatusListener listener){
         this.mOnEmojiViewPagerStatusListener = listener;
     }
+
+    public void setOnEmojiPagerBoardStatusListener(OnEmojiPagerBoardStatusListener listener){
+        this.mOnEmojiPagerBoardStatusListener = listener;
+    }
+
 
     public EmojiViewPager getEmojiViewPager(int pagerId){
         if(mEmojiViewPagers == null){
@@ -102,9 +114,13 @@ public class EmojiPagerBoard extends BaseViewPager{
         setupEmojiBoard(emojiPackets);
 
         mEmojiPagerBoardAdapter.notifyDataSetChanged();
+
+        if(this.mOnEmojiPagerBoardStatusListener != null) {
+            this.mOnEmojiPagerBoardStatusListener.onSetEmojiPacket();
+        }
     }
 
-    class EmojiPagerBoardAdapter extends PagerAdapter{
+    class EmojiPagerBoardAdapter extends PagerAdapter implements EmojiBoardTab.EmojiIconTabProvider {
 
         @Override
         public int getCount() {
@@ -146,6 +162,21 @@ public class EmojiPagerBoard extends BaseViewPager{
             }
 
             container.removeView(mEmojiViewPagers.get(position));
+        }
+
+        @Override
+        public int getPageIcon(int position) {
+            return R.mipmap.ic_launcher;
+        }
+
+        @Override
+        public int getPageSelectIcon(int position) {
+            return R.mipmap.ic_launcher;
+        }
+
+        @Override
+        public String getPageIconText(int position) {
+            return mEmojiPackets == null ? "" : mEmojiPackets.get(position).mPacketName;
         }
     }
 }

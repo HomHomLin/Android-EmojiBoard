@@ -8,4 +8,23 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="CustomTabPageIndicator.Text" parent="android:TextAppearance.Medium">
+        <item name="android:typeface">monospace</item>
+    </style>
+
+    <style name="pagertab_style">
+        <item name="android:background">@drawable/tab_bg_normal</item>
+        <item name="tabBackground">@drawable/tab_bg_transparent</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textAppearance">@style/CustomTabPageIndicator.Text</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="tabIndicatorColor">#ff4848</item>
+        <item name="tabUnderlineColor">#1A000000</item>
+        <item name="tabDividerColor">#00000000</item>
+        <item name="tabShouldExpand">false</item>
+        <item name="tabPaddingLeftRight">8dp</item>
+        <item name="tabDrawMode">text</item>
+        <item name="tabTextSelectColor">#ff4848</item>
+    </style>
+
 </resources>

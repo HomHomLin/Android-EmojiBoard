@@ -18,16 +18,19 @@ import homhom.lib.emojiboard.bean.EmojiPacket;
  * 内部的分页表情面板ViewPager
  * Created by linhonghong on 2015/12/31.
  */
-public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmojiViewPagerStatusListener{
+public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmojiViewPagerStatusListener,EmojiPagerBoard.OnEmojiPagerBoardStatusListener{
 
     private EmojiPagerBoard mEmojiPagerBoard;
 
     private LinearLayout mIndicatorLayout;
 
+    private EmojiBoardTab mEmojiTab;
+
     private ArrayList<EmojiPacket> mEmojiPackets;
 
     private boolean mIsAddEmojiPagerBoard = false;
     private boolean mIsAddIndicatorLayout = false;
+    private boolean mIsAddEmojiTab = false;
 
     private static final int PAGE_ITEM_NONE = -1;
 
@@ -49,14 +52,15 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
 
     public EmojiBoard(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initEmojiInterBoard(context);
+        initEmojiInterBoard(context, attrs);
     }
 
-    public void initEmojiInterBoard(Context context){
+    public void initEmojiInterBoard(Context context, AttributeSet attrs){
         mContext = context;
         if(mEmojiBoardOnPageChangeListener == null){
             mEmojiBoardOnPageChangeListener = new EmojiBoardOnPageChangeListener();
         }
+        addEmojiTab(context,attrs);
         addEmojiIndicator(context);
         addEmojiPagerBoard(context);
     }
@@ -70,7 +74,8 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
         if(mEmojiPagerBoard != null) {
             mEmojiPagerBoard.setEmojiPackets(this.mEmojiPackets);
             mEmojiPagerBoard.setOnEmojiViewPagerStatusListener(this);
-            mEmojiPagerBoard.addOnPageChangeListener(mEmojiBoardOnPageChangeListener);
+            mEmojiPagerBoard.setOnEmojiPagerBoardStatusListener(this);
+//            mEmojiPagerBoard.addOnPageChangeListener(mEmojiBoardOnPageChangeListener);
         }
     }
 
@@ -127,10 +132,38 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
 
         this.addView(mEmojiPagerBoard, layoutParams);
 
+        if(mEmojiTab != null){
+            mEmojiTab.setViewPager(mEmojiPagerBoard);
+            mEmojiTab.setOnPageChangeListener(mEmojiBoardOnPageChangeListener);
+        }
+
     }
 
     public int getCurrentItem(){
         return this.mCurrentItem;
+    }
+
+    private void addEmojiTab(Context context, AttributeSet attrs){
+        if(mEmojiTab == null){
+            mEmojiTab = new EmojiBoardTab(context, attrs);
+        }
+
+        if(mIsAddEmojiTab){
+            return;
+        }
+
+        mIsAddEmojiTab = true;
+
+        mEmojiTab.setId(R.id.emoji_view_pager_tab_id);
+
+        RelativeLayout.LayoutParams layoutParams =
+                new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.MATCH_PARENT,
+                        getResources().getDimensionPixelSize(R.dimen.emoji_tab_height));
+
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+
+        this.addView(mEmojiTab, layoutParams);
     }
 
     private void addEmojiIndicator(Context context){
@@ -153,7 +186,9 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
                         RelativeLayout.LayoutParams.MATCH_PARENT,
                         RelativeLayout.LayoutParams.WRAP_CONTENT);
 
-        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        layoutParams.addRule(RelativeLayout.ABOVE, mEmojiTab.getId());
+
+//        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 
         this.addView(mIndicatorLayout, layoutParams);
 
@@ -291,5 +326,12 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
     @Override
     public void onPageScrollStateChanged(int pagerId ,int state) {
 
+    }
+
+    @Override
+    public void onSetEmojiPacket() {
+        if(mEmojiTab != null){
+            mEmojiTab.notifyDataSetChanged();
+        }
     }
 }

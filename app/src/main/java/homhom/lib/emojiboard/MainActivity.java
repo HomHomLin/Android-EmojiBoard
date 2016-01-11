@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import homhom.lib.emojiboard.bean.Emoji;
 import homhom.lib.emojiboard.bean.EmojiPacket;
 import homhom.lib.emojiboard.ui.EmojiBoard;
-import homhom.lib.emojiboard.ui.EmojiPagerBoard;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
             emojiPacket.mColumn = 4;
             emojiPacket.mId = 1;
             emojiPacket.mShowDelete = true;
+            emojiPacket.mPacketName = x + "";
             ArrayList<Emoji> list = new ArrayList<>();
             for (int i = 0; i < 15 * (x + 1); i++) {
                 Emoji emoji = new Emoji();
