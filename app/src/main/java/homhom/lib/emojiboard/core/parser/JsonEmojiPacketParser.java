@@ -42,7 +42,9 @@ public class JsonEmojiPacketParser extends BaseEmojiPacketParser{
                 File parser_file = new File(parser_file_path);
                 try {
                     json_str = readJsonFile(parser_file);
-                    EmojiBoardFixer.getInstance().getEmojiManager().addEmojiPacket(parserEmojiPacket(json_str));
+                    EmojiBoardFixer.getInstance().
+                            getEmojiManager().
+                            addEmojiPacket(parserEmojiPacket(FileUtil.getFileCurrentDirectoryPath(parser_file.getAbsolutePath()),json_str));
                     break;
                 }catch (Exception e){
                     e.printStackTrace();
@@ -51,7 +53,7 @@ public class JsonEmojiPacketParser extends BaseEmojiPacketParser{
         }
     }
 
-    public EmojiPacket parserEmojiPacket(String json) throws Exception{
+    public EmojiPacket parserEmojiPacket(String path, String json) throws Exception{
         EmojiPacket emojiPacket = new EmojiPacket();
         JSONObject obj = new JSONObject(json);
         if(obj.has("id")){
@@ -79,11 +81,11 @@ public class JsonEmojiPacketParser extends BaseEmojiPacketParser{
                 if(emoji_obj.has("id")){
                     emoji.mId = emoji_obj.getInt("id");
                 }
-                if(emoji_obj.has("name")){
-                    emoji.mName = emoji_obj.getString("name");
+                if(emoji_obj.has("key")){
+                    emoji.mName = emoji_obj.getString("key");
                 }
-                if(emoji_obj.has("path")){
-                    emoji.mPath = emoji_obj.getString("path");
+                if(emoji_obj.has("value")){
+                    emoji.mPath = path + emoji_obj.getString("value");
                 }
                 emojiPacket.mEmojis.add(emoji);
             }
