@@ -2,12 +2,14 @@ package homhom.lib.emojiboard;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.ArrayList;
 
 import homhom.lib.emojiboard.bean.Emoji;
 import homhom.lib.emojiboard.bean.EmojiPacket;
 import homhom.lib.emojiboard.ui.EmojiBoard;
+import homhom.lib.emojiboard.util.FileUtil;
 
 public class MainActivity extends AppCompatActivity {
 

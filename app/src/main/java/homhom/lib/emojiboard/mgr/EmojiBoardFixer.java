@@ -1,11 +1,15 @@
 package homhom.lib.emojiboard.mgr;
 
+import homhom.lib.emojiboard.core.EmojiBoardConfiguration;
+
 /**
  * Created by linhonghong on 2015/12/31.
  */
 public class EmojiBoardFixer extends BaseManager{
 
     private static EmojiBoardFixer mEmojiBoardFixer;
+
+    private EmojiBoardConfiguration mEmojiBoardConfiguration;
 
     private EmojiManager mEmojiManager;
 
@@ -30,6 +34,18 @@ public class EmojiBoardFixer extends BaseManager{
             mEmojiViewManager = EmojiViewManager.getInstance();
         }
         return this.mEmojiViewManager;
+    }
+
+    public void initConfiguration(EmojiBoardConfiguration configuration){
+        this.mEmojiBoardConfiguration = configuration;
+        this.mEmojiBoardConfiguration.getEmojiPacketParser().init();
+    }
+
+    public EmojiBoardConfiguration getEmojiBoardConfiguration() throws Exception{
+        if(mEmojiBoardConfiguration == null){
+            throw new Exception("EmojiBoardConfiguration is null");
+        }
+        return this.mEmojiBoardConfiguration;
     }
 
     public EmojiBoardFixer(){

@@ -19,6 +19,11 @@ public class EmojiPacketUtil {
         return line;
     }
 
+    /**
+     * 带有删除的pager有几个item
+     * @param column
+     * @return
+     */
     public static int itemSizeInPagerPreWithDelete(int column){
 
         int line = splitGetLine(column);

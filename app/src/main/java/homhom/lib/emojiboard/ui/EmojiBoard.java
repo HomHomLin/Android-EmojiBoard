@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 import homhom.lib.emojiboard.R;
 import homhom.lib.emojiboard.bean.EmojiPacket;
+import homhom.lib.emojiboard.mgr.EmojiBoardFixer;
 
 /**
  * 内部的分页表情面板ViewPager
@@ -68,6 +69,9 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
     }
 
     private void setupEmojiViewPager(){
+        if(this.mEmojiPackets == null){
+            this.mEmojiPackets = EmojiBoardFixer.getInstance().getEmojiManager().getEmojiPackets();
+        }
         if(mEmojiPagerBoard != null) {
             mEmojiPagerBoard.setEmojiPackets(this.mEmojiPackets);
             mEmojiPagerBoard.setOnEmojiViewPagerStatusListener(this);
