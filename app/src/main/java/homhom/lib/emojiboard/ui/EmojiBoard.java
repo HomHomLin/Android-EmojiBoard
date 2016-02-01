@@ -38,8 +38,6 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
 
     private int mCurrentItem = 0;
 
-    private Context mContext;
-
     private EmojiBoardOnPageChangeListener mEmojiBoardOnPageChangeListener;
 
     public EmojiBoard(Context context) {
@@ -52,17 +50,16 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
 
     public EmojiBoard(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initEmojiInterBoard(context, attrs);
+        initEmojiInterBoard(attrs);
     }
 
-    public void initEmojiInterBoard(Context context, AttributeSet attrs){
-        mContext = context;
+    public void initEmojiInterBoard(AttributeSet attrs){
         if(mEmojiBoardOnPageChangeListener == null){
             mEmojiBoardOnPageChangeListener = new EmojiBoardOnPageChangeListener();
         }
-        addEmojiTab(context,attrs);
-        addEmojiIndicator(context);
-        addEmojiPagerBoard(context);
+        addEmojiTab(attrs);
+        addEmojiIndicator();
+        addEmojiPagerBoard();
     }
 
     public void setEmojiPackets(ArrayList<EmojiPacket> emojipackets){
@@ -89,7 +86,7 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
                     new LinearLayout.LayoutParams(
                             LinearLayout.LayoutParams.WRAP_CONTENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT);
-            int margin = mContext.getResources().getDimensionPixelSize(R.dimen.emoji_indicator_iv_margin);
+            int margin = getContext().getResources().getDimensionPixelSize(R.dimen.emoji_indicator_iv_margin);
             layoutParams.setMargins(
                     margin,
                     margin,
@@ -97,7 +94,7 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
                     margin);
             mIndicatorLayout.removeAllViews();
             for(int i = 0 ; i < mPagerSize; i ++){
-                ImageView indicator = new ImageView(mContext);
+                ImageView indicator = new ImageView(getContext());
                 if(i == 0){
                     indicator.setImageResource(R.mipmap.emoji_default_indicator_mark);
                 }else {
@@ -108,9 +105,9 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
         }
     }
 
-    private void addEmojiPagerBoard(Context context){
+    private void addEmojiPagerBoard(){
         if(mEmojiPagerBoard == null){
-            mEmojiPagerBoard = new EmojiPagerBoard(context);
+            mEmojiPagerBoard = new EmojiPagerBoard(getContext());
         }
 
         if(mIsAddEmojiPagerBoard){
@@ -143,9 +140,9 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
         return this.mCurrentItem;
     }
 
-    private void addEmojiTab(Context context, AttributeSet attrs){
+    private void addEmojiTab(AttributeSet attrs){
         if(mEmojiTab == null){
-            mEmojiTab = new EmojiBoardTab(context, attrs);
+            mEmojiTab = new EmojiBoardTab(getContext(), attrs);
         }
 
         if(mIsAddEmojiTab){
@@ -166,9 +163,9 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
         this.addView(mEmojiTab, layoutParams);
     }
 
-    private void addEmojiIndicator(Context context){
+    private void addEmojiIndicator(){
         if(mIndicatorLayout == null){
-            mIndicatorLayout = new LinearLayout(context);
+            mIndicatorLayout = new LinearLayout(getContext());
         }
 
         if(mIsAddIndicatorLayout){

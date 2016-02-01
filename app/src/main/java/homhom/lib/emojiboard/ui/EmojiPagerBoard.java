@@ -21,8 +21,6 @@ public class EmojiPagerBoard extends BaseViewPager{
 
     private int mBoardPagerSize;
 
-    private Context mContext;
-
     private EmojiPagerBoardAdapter mEmojiPagerBoardAdapter;
 
     private ArrayList<EmojiViewPager> mEmojiViewPagers;
@@ -41,12 +39,10 @@ public class EmojiPagerBoard extends BaseViewPager{
 
     public EmojiPagerBoard(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initEmojiBoard(context);
+        initEmojiBoard();
     }
 
-    public void initEmojiBoard(Context context){
-
-        mContext = context;
+    public void initEmojiBoard(){
 
         if(mEmojiViewPagers == null){
             mEmojiViewPagers = new ArrayList<>();
@@ -89,7 +85,7 @@ public class EmojiPagerBoard extends BaseViewPager{
                         ViewGroup.LayoutParams.MATCH_PARENT);
 
         for(int i = 0 ; i < mBoardPagerSize; i ++){
-            EmojiViewPager emojiViewPager = new EmojiViewPager(mContext);
+            EmojiViewPager emojiViewPager = new EmojiViewPager(getContext());
 
             emojiViewPager.setPagerId(i);
 

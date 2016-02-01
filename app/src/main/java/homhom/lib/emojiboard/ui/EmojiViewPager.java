@@ -32,13 +32,12 @@ public class EmojiViewPager extends BaseViewPager
     private boolean mShowDelete;
     private EmojiViewPagerAdapter mAdapter;
     private HashMap<Integer, List<Emoji>> mViewPagerDataList;
-    private Context mContext;
     private OnEmojiViewPagerStatusListener mOnEmojiViewPagerStatusListener;
     private EmojiOnPageChangeListener mOnPageChangeListener;
 
     public EmojiViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initEmojiViewPager(context);
+        initEmojiViewPager();
     }
 
     public EmojiViewPager(Context context) {
@@ -54,9 +53,8 @@ public class EmojiViewPager extends BaseViewPager
         public void onPageScrollStateChanged(int pageId, int state);
     }
 
-    public void initEmojiViewPager(Context context){
+    public void initEmojiViewPager(){
         Log.i("EmojiViewPager", "initEmojiViewpager");
-        this.mContext = context;
 //        if(mEmojiViews == null){
 //            mEmojiViews = new ArrayList<>();
 //        }
@@ -291,9 +289,9 @@ public class EmojiViewPager extends BaseViewPager
 //                return null;
 //            }
 //            EmojiView emojiView = mEmojiViews.get(position);
-            EmojiView emojiView = new EmojiView(mContext);
+            EmojiView emojiView = new EmojiView(getContext());
 
-            emojiView.setEmojisInfo(mContext,
+            emojiView.setEmojisInfo(getContext(),
                     getEmojiPacketId(),
                     mViewPagerDataList.get(position),
                     getEmojiPacketColum(),
