@@ -6,6 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import homhom.lib.emojiboard.core.BaseEmojiProvider;
+import homhom.lib.emojiboard.core.EmojiBoardConfiguration;
+import homhom.lib.emojiboard.mgr.EmojiBoardFixer;
+
 /**
  * Created by linhonghong on 2016/1/11.
  */
@@ -24,5 +28,11 @@ public class StartActivity extends AppCompatActivity {
                 startActivity(new Intent(StartActivity.this, MainActivity.class));
             }
         });
+
+        EmojiBoardConfiguration configuration = EmojiBoardConfiguration.
+                Builder(this).
+                setEmojiProvider(new BaseEmojiProvider()).
+                build();
+        EmojiBoardFixer.getInstance().initConfiguration(configuration);
     }
 }

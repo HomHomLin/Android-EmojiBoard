@@ -15,11 +15,16 @@ public class EmojiBoardConfiguration {
     public static String EMOJI_PACKET_EXTENSIONS = "hem";//后缀
     public static String EMOJI_PACKET_PARSER_EXTENSIONS = "js";//后缀
     public static String EMOJI_PACKET_PRE_FIX = "hem_";//前缀
+    public EmojiProvider mEmojiProvider;//解析提供器
 
     private BaseEmojiPacketParser mBaseEmojiPacketParser;
 
     public static BaseEmojiPacketParser DefaultParser(){
         return new JsonEmojiPacketParser();
+    }
+
+    public static EmojiProvider DefaultEmojiProvider(){
+        return new BaseEmojiProvider();
     }
 
     public static EmojiBoardConfiguration Builder(Context context){
@@ -29,6 +34,11 @@ public class EmojiBoardConfiguration {
 
     public EmojiBoardConfiguration setEmojiDirectory(String path){
         mEmojiDirectory = path;
+        return build();
+    }
+
+    public EmojiBoardConfiguration setEmojiProvider(EmojiProvider emojiProvider){
+        this.mEmojiProvider = emojiProvider;
         return build();
     }
 
@@ -55,6 +65,13 @@ public class EmojiBoardConfiguration {
             this.mBaseEmojiPacketParser = EmojiBoardConfiguration.DefaultParser();
         }
         return this.mBaseEmojiPacketParser;
+    }
+
+    public EmojiProvider getEmojiProvider(){
+        if(this.mEmojiProvider == null){
+            this.mEmojiProvider = EmojiBoardConfiguration.DefaultEmojiProvider();
+        }
+        return this.mEmojiProvider;
     }
 
     public static EmojiBoardConfiguration build(){

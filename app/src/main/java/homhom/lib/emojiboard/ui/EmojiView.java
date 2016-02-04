@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -95,19 +96,30 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = View.inflate(mContext, R.layout.item_emoji_view, null);
-            return new ViewHolder(view);
+            return new ViewHolder(new RelativeLayout(mContext));
         }
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             if(position == mEmojis.size() && mShowDelete){
                 //最后一个是delete
-                holder.mView.setImageResource(R.mipmap.emoji_backspace);
-                holder.mTextView.setText("-1");
+                try {
+                    EmojiBoardFixer.getInstance().
+                            getEmojiBoardConfiguration().
+                            getEmojiProvider().onShowDelete(holder.mView);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+//                holder.mView.setImageResource(R.mipmap.emoji_backspace);
+//                holder.mTextView.setText("-1");
             }else{
-                holder.mView.setImageResource(R.mipmap.ic_launcher);
-                holder.mTextView.setText(mEmojis.get(position).mId + "");
+                try {
+                    EmojiBoardFixer.getInstance().
+                            getEmojiBoardConfiguration().
+                            getEmojiProvider().onShow(holder.mView,mEmojis.get(position));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
         }
@@ -119,10 +131,10 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
 
         public class ViewHolder extends RecyclerView.ViewHolder{
 
-            private ImageView mView;
-            private TextView mTextView;
+            private View mView;
+//            private TextView mTextView;
 
-            public ViewHolder(View itemView) {
+            public ViewHolder(RelativeLayout itemView) {
                 super(itemView);
 
                 ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -131,9 +143,24 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
                 layoutParams.height = size;
                 layoutParams.width = size;
                 itemView.setLayoutParams(layoutParams);
+                RelativeLayout.LayoutParams itemLayoutParams = new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.WRAP_CONTENT,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT);
+                itemLayoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+                try {
+                    mView = EmojiBoardFixer.getInstance().
+                            getEmojiBoardConfiguration().
+                            getEmojiProvider().
+                            onCreateView(mContext,itemView);
+                    mView.setLayoutParams(itemLayoutParams);
+//                    mView.setLayoutParams(layoutParams);
+                    itemView.addView(mView);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+//                mView = (ImageView)itemView.findViewById(R.id.iv_emoji);
 
-                mView = (ImageView)itemView.findViewById(R.id.iv_emoji);
-                mTextView = (TextView)itemView.findViewById(R.id.tv_emoji_id);
+//                mTextView = (TextView)itemView.findViewById(R.id.tv_emoji_id);
             }
         }
     }
