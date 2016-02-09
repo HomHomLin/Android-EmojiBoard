@@ -1,0 +1,6 @@
+<resources>
+    <dimen name="emoji_indicator_iv_margin">2dp</dimen>
+    <dimen name="emoji_dot_wh">8dp</dimen>
+    <dimen name="emoji_dot_linelayout_h">23dp</dimen>
+    <dimen name="emoji_tab_height">100dp</dimen>
+</resources>

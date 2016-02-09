@@ -100,9 +100,9 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
             for(int i = 0 ; i < mPagerSize; i ++){
                 ImageView indicator = new ImageView(getContext());
                 if(i == 0){
-                    indicator.setImageResource(R.mipmap.emoji_default_indicator_mark);
+                    indicator.setImageResource(R.drawable.emoji_default_indicator_mark);
                 }else {
-                    indicator.setImageResource(R.mipmap.emoji_default_indicator_unmark);
+                    indicator.setImageResource(R.drawable.emoji_default_indicator_unmark);
                 }
                 mIndicatorLayout.addView(indicator, layoutParams);
             }
@@ -270,9 +270,9 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
                 ImageView indicator = (ImageView)mIndicatorLayout.getChildAt(i);
                 if(indicator != null){
                     if(i == position){
-                        indicator.setImageResource(R.mipmap.emoji_default_indicator_mark);
+                        indicator.setImageResource(R.drawable.emoji_default_indicator_mark);
                     }else {
-                        indicator.setImageResource(R.mipmap.emoji_default_indicator_unmark);
+                        indicator.setImageResource(R.drawable.emoji_default_indicator_unmark);
                     }
                 }
             }

@@ -21,13 +21,13 @@ public class BaseEmojiProvider implements EmojiProvider{
     @Override
     public View onShow(View view, Emoji emoji) {
         //基础现实引擎
-        ((ImageView)view).setImageResource(R.mipmap.ic_launcher);
+        ((ImageView)view).setImageResource(R.drawable.ic_launcher);
         return view;
     }
 
     @Override
     public View onShowDelete(View view) {
-        ((ImageView)view).setImageResource(R.mipmap.emoji_backspace);
+        ((ImageView)view).setImageResource(R.drawable.emoji_backspace);
         return view;
     }
 }

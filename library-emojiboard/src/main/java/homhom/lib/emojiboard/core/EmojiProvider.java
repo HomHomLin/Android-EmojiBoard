@@ -3,7 +3,6 @@ package homhom.lib.emojiboard.core;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import homhom.lib.emojiboard.bean.Emoji;
 

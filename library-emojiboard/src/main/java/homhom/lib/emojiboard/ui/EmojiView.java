@@ -6,13 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import java.util.List;
 
-import homhom.lib.emojiboard.R;
 import homhom.lib.emojiboard.bean.Emoji;
 import homhom.lib.emojiboard.mgr.EmojiBoardFixer;
 import homhom.lib.emojiboard.mgr.EmojiManager;

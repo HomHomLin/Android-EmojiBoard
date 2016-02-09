@@ -1,4 +1,4 @@
-package homhom.lib.emojiboard;
+package homhom.lib.demo;
 
 import org.junit.Test;
 

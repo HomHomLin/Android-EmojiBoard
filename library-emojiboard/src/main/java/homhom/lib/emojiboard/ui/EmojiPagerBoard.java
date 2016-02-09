@@ -162,12 +162,12 @@ public class EmojiPagerBoard extends BaseViewPager{
 
         @Override
         public int getPageIcon(int position) {
-            return R.mipmap.ic_launcher;
+            return R.drawable.ic_launcher;
         }
 
         @Override
         public int getPageSelectIcon(int position) {
-            return R.mipmap.ic_launcher;
+            return R.drawable.ic_launcher;
         }
 
         @Override

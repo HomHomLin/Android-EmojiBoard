@@ -47,7 +47,7 @@ public class EmojiManager extends BaseManager{
             mEmojiDataChangerListeners = new ArrayList<EmojiDataChangerListener>();
         }
 
-        this.mDeleteEmojiRescouce = R.mipmap.emoji_backspace;
+        this.mDeleteEmojiRescouce = R.drawable.emoji_backspace;
 
     }
 
