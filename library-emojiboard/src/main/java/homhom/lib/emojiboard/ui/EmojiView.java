@@ -140,9 +140,12 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
                 layoutParams.height = size;
                 layoutParams.width = size;
                 itemView.setLayoutParams(layoutParams);
+//                RelativeLayout.LayoutParams itemLayoutParams = new RelativeLayout.LayoutParams(
+//                        RelativeLayout.LayoutParams.WRAP_CONTENT,
+//                        RelativeLayout.LayoutParams.WRAP_CONTENT);
                 RelativeLayout.LayoutParams itemLayoutParams = new RelativeLayout.LayoutParams(
-                        RelativeLayout.LayoutParams.WRAP_CONTENT,
-                        RelativeLayout.LayoutParams.WRAP_CONTENT);
+                        size - 20,
+                        size - 20);
                 itemLayoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
                 try {
                     mView = EmojiBoardFixer.getInstance().

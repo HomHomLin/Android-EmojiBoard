@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
+
 import homhom.lib.emojiboard.core.BaseEmojiProvider;
 import homhom.lib.emojiboard.core.EmojiBoardConfiguration;
 import homhom.lib.emojiboard.mgr.EmojiBoardFixer;
@@ -29,9 +31,11 @@ public class StartActivity extends AppCompatActivity {
             }
         });
 
+        Fresco.initialize(this);
+
         EmojiBoardConfiguration configuration = EmojiBoardConfiguration.
                 Builder(this).
-                setEmojiProvider(new BaseEmojiProvider()).
+                setEmojiProvider(new FrescoEmojiProvider()).
                 build();
         EmojiBoardFixer.getInstance().initConfiguration(configuration);
     }
