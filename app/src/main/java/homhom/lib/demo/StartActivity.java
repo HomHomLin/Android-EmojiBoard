@@ -2,7 +2,9 @@ package homhom.lib.demo;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -35,6 +37,7 @@ public class StartActivity extends AppCompatActivity {
 
         EmojiBoardConfiguration configuration = EmojiBoardConfiguration.
                 Builder(this).
+                setEmojiDirectory(Environment.getExternalStorageDirectory().getAbsolutePath()+"/emojiview/emoji/").
                 setEmojiProvider(new FrescoEmojiProvider()).
                 build();
         EmojiBoardFixer.getInstance().initConfiguration(configuration);

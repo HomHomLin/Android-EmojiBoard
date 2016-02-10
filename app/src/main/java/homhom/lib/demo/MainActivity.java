@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import homhom.lib.emojiboard.bean.Emoji;
 import homhom.lib.emojiboard.bean.EmojiPacket;
+import homhom.lib.emojiboard.mgr.EmojiBoardFixer;
 import homhom.lib.emojiboard.ui.EmojiBoard;
 
 public class MainActivity extends AppCompatActivity {
@@ -15,6 +16,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if(EmojiBoardFixer.getInstance().getEmojiManager().getEmojiPackets() != null
+                && EmojiBoardFixer.getInstance().getEmojiManager().getEmojiPackets().size() > 0){
+            return;
+        }
         EmojiBoard emojiViewPager = (EmojiBoard) findViewById(R.id.emojiView);
         ArrayList<EmojiPacket> lists = new ArrayList<>();
         for(int x = 0 ; x < 5; x ++) {

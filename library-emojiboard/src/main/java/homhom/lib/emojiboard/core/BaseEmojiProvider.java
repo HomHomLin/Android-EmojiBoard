@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import homhom.lib.emojiboard.R;
 import homhom.lib.emojiboard.bean.Emoji;
@@ -29,5 +30,10 @@ public class BaseEmojiProvider implements EmojiProvider{
     public View onShowDelete(View view) {
         ((ImageView)view).setImageResource(R.drawable.emoji_backspace);
         return view;
+    }
+
+    @Override
+    public RelativeLayout.LayoutParams onSetLayoutParams(RelativeLayout.LayoutParams layoutParams) {
+        return layoutParams;
     }
 }

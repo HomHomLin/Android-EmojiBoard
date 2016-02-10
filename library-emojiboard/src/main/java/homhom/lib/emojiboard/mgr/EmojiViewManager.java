@@ -12,6 +12,8 @@ public class EmojiViewManager extends BaseManager{
 
     private int mSpanCount = 5;//defalut = 5
 
+    private int mViewPading = 20;// Emojiview的表情大小控制padding
+
     private int mBoardWidth,mBoardHeight;//面板的高度和宽度
 
     private boolean mHasFixSize = true;
@@ -60,6 +62,14 @@ public class EmojiViewManager extends BaseManager{
 
     public boolean getHasFixedSize(){
         return this.mHasFixSize;
+    }
+
+    public void setViewPadding(int padding){
+        this.mViewPading = padding;
+    }
+
+    public int getViewPadding(){
+        return this.mViewPading;
     }
 
 

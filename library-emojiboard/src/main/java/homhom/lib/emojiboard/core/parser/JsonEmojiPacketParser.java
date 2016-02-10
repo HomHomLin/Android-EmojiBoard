@@ -36,10 +36,9 @@ public class JsonEmojiPacketParser extends BaseEmojiPacketParser{
     @Override
     public void onParse(ArrayList<File> emojiPacketDirectory) {
         for(File file : emojiPacketDirectory){
-            String[] files = file.list(new FileFilter());
-            for(String parser_file_path : files){
+            File[] files = file.listFiles(new FileFilter());
+            for(File parser_file : files){
                 String json_str = null;
-                File parser_file = new File(parser_file_path);
                 try {
                     json_str = readJsonFile(parser_file);
                     EmojiBoardFixer.getInstance().

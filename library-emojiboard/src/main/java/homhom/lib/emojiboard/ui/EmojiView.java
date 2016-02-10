@@ -136,23 +136,26 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
 
                 ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT);
-                int size = EmojiBoardFixer.getInstance().getEmojiViewManager().getBoardWidth() / mColumn;
+                int size = EmojiBoardFixer.getInstance()
+                        .getEmojiViewManager().getBoardWidth() / mColumn;
                 layoutParams.height = size;
                 layoutParams.width = size;
                 itemView.setLayoutParams(layoutParams);
-//                RelativeLayout.LayoutParams itemLayoutParams = new RelativeLayout.LayoutParams(
-//                        RelativeLayout.LayoutParams.WRAP_CONTENT,
-//                        RelativeLayout.LayoutParams.WRAP_CONTENT);
+                int itemSize = size - EmojiBoardFixer.getInstance()
+                        .getEmojiViewManager().getViewPadding();
                 RelativeLayout.LayoutParams itemLayoutParams = new RelativeLayout.LayoutParams(
-                        size - 20,
-                        size - 20);
+                        itemSize,
+                        itemSize);
                 itemLayoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
                 try {
                     mView = EmojiBoardFixer.getInstance().
                             getEmojiBoardConfiguration().
                             getEmojiProvider().
                             onCreateView(mContext,itemView);
-                    mView.setLayoutParams(itemLayoutParams);
+                    mView.setLayoutParams(EmojiBoardFixer.getInstance().
+                            getEmojiBoardConfiguration().
+                            getEmojiProvider().
+                            onSetLayoutParams(itemLayoutParams));
 //                    mView.setLayoutParams(layoutParams);
                     itemView.addView(mView);
                 }catch (Exception e){

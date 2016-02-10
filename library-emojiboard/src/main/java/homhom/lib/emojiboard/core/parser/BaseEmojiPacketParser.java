@@ -11,6 +11,9 @@ import homhom.lib.emojiboard.util.FileUtil;
 
 /**
  * 表情包解析器
+ * 1.先查找hem后缀的zip文件
+ * 2.解压后查找带有hem_开头的文件夹
+ * 3.查找带有js后缀的文件并读取配置文件
  * 我们默认这样考虑，简单化：目录下有zip，我们就解压出来，默认当作解压完就会删掉文件，所以不存在没有被解压的zip
  * 表情包格式有好多种
  * Created by linhonghong on 2016/2/1.
@@ -49,7 +52,7 @@ public abstract class BaseEmojiPacketParser {
         parser();
     }
 
-    private String[] getFileList() throws Exception{
+    private File[] getFileList() throws Exception{
         File root = new File(mRootPath);
         if(!root.exists()){
             throw new Exception("Emoji Directory is not exist");
@@ -57,22 +60,21 @@ public abstract class BaseEmojiPacketParser {
         if(!root.isDirectory()){
             throw new Exception("Emoji Directory which set is not a directory");
         }
-        String[] files = root.list();
+        File[] files = root.listFiles();
         return files;
     }
 
     /**
      * 寻找没有解压的表情包
      */
-    private void findEmojiPacketsZip(String[] files){
+    private void findEmojiPacketsZip(File[] files){
         if(mEmojiPacketZipPath != null){
             mEmojiPacketZipPath.clear();
         }else{
             mEmojiPacketZipPath = new ArrayList<>();
         }
-        for(String name : files){
-            String extensions = FileUtil.getExtensions(name);
-            File file = new File(name);
+        for(File file : files){
+            String extensions = FileUtil.getExtensions(file.getAbsolutePath());
             if(!file.exists()){
                 //不存在了
                 continue;
@@ -109,14 +111,13 @@ public abstract class BaseEmojiPacketParser {
      * 查找解压完的emojipacket
      * @param files
      */
-    private void findEmojiPacketDirectory(String[] files){
+    private void findEmojiPacketDirectory(File[] files){
         if(mEmojiPacketDirectoryPath != null){
             mEmojiPacketDirectoryPath.clear();
         }else{
             mEmojiPacketDirectoryPath = new ArrayList<>();
         }
-        for(String name : files){
-            File file = new File(name);
+        for(File file : files){
             if(!file.exists()){
                 //不存在了
                 continue;

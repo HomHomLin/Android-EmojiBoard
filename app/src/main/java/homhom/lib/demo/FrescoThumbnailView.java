@@ -19,6 +19,7 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 public class FrescoThumbnailView extends SimpleDraweeView {
 
     private final static String HTTP_PERFIX = "http://";
+    private final static String HTTP_PERFIXS = "https://";
 
     private String mThumbnailUri = null;
 
@@ -95,7 +96,7 @@ public class FrescoThumbnailView extends SimpleDraweeView {
             }
             mThumbnailUri = thumbnailUri;
 
-            if (mThumbnailUri.startsWith(HTTP_PERFIX)) {
+            if (mThumbnailUri.startsWith(HTTP_PERFIX) || mThumbnailUri.startsWith(HTTP_PERFIXS)) {
 
                 Uri uri = Uri.parse(mThumbnailUri);
                 this.getHierarchy().setPlaceholderImage(defaultResID);
@@ -122,7 +123,7 @@ public class FrescoThumbnailView extends SimpleDraweeView {
 
     }
 
-    public void loadLocalImageNoshowImageOnLoading(String path, int defaultRes, SimpleDraweeView imageView){
+    public void loadLocalImageNoshowImageOnLoading(String path, int defaultRes){
         this.getHierarchy().setPlaceholderImage(defaultRes);
         if(null == path || path.length() == 0){
             this.setController(defaultRes);

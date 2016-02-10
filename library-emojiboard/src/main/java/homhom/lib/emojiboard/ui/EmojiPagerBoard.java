@@ -13,6 +13,7 @@ import homhom.lib.emojiboard.bean.EmojiPacket;
 import homhom.lib.emojiboard.mgr.EmojiBoardFixer;
 
 /**
+ * 其实这个viewpager是多余的，但是为了更方便的处理表情数据包，所以多出了这个viewpager
  * Created by linhonghong on 2016/1/5.
  */
 public class EmojiPagerBoard extends BaseViewPager{

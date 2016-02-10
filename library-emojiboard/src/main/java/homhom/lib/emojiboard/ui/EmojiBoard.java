@@ -74,8 +74,6 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
         }
         if(mEmojiPagerBoard != null) {
             mEmojiPagerBoard.setEmojiPackets(this.mEmojiPackets);
-            mEmojiPagerBoard.setOnEmojiViewPagerStatusListener(this);
-            mEmojiPagerBoard.setOnEmojiPagerBoardStatusListener(this);
 //            mEmojiPagerBoard.addOnPageChangeListener(mEmojiBoardOnPageChangeListener);
         }
     }
@@ -118,7 +116,10 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
             return;
         }
 
-        setupEmojiViewPager();
+
+        mEmojiPagerBoard.setOnEmojiViewPagerStatusListener(this);
+        mEmojiPagerBoard.setOnEmojiPagerBoardStatusListener(this);
+//        setupEmojiViewPager();
 
 //        mEmojiPagerBoard.setNoFocus(true);//如果内部的view的页数大于 1 页，静止滑动
 
@@ -137,6 +138,7 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
             mEmojiTab.setViewPager(mEmojiPagerBoard);
             mEmojiTab.setOnPageChangeListener(mEmojiBoardOnPageChangeListener);
         }
+
 
     }
 
