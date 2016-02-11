@@ -12,7 +12,12 @@ public class DeleteBean extends Emoji{
 
     public DeleteBean(){
         super();
-        mPath = EmojiBoardFixer.getInstance().getEmojiManager().getDeleteEmojiResouce();
+        try {
+            mPath = EmojiBoardFixer.getInstance().getEmojiBoardConfiguration().getDeleteEmojiResouce();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         mId = EmojiManager.TAG_DELETE_EMOJI;
+        mName = "删除";
     }
 }

@@ -13,6 +13,5 @@ import homhom.lib.emojiboard.bean.Emoji;
 public interface EmojiProvider {
     public View onCreateView(Context context,ViewGroup parent);
     public View onShow(View view, Emoji emoji) ;
-    public View onShowDelete(View view);
     public RelativeLayout.LayoutParams onSetLayoutParams(RelativeLayout.LayoutParams layoutParams);
 }

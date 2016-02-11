@@ -8,6 +8,8 @@ import android.widget.RelativeLayout;
 
 import homhom.lib.emojiboard.R;
 import homhom.lib.emojiboard.bean.Emoji;
+import homhom.lib.emojiboard.mgr.EmojiBoardFixer;
+import homhom.lib.emojiboard.mgr.EmojiManager;
 
 /**
  * Created by Linhh on 16/2/4.
@@ -22,13 +24,12 @@ public class BaseEmojiProvider implements EmojiProvider{
     @Override
     public View onShow(View view, Emoji emoji) {
         //基础现实引擎
-        ((ImageView)view).setImageResource(R.drawable.ic_launcher);
-        return view;
-    }
-
-    @Override
-    public View onShowDelete(View view) {
-        ((ImageView)view).setImageResource(R.drawable.emoji_backspace);
+        if(emoji.mId == EmojiManager.TAG_DELETE_EMOJI){
+            //删除
+            ((ImageView) view).setImageResource(R.drawable.emoji_backspace);
+        }else {
+            ((ImageView) view).setImageResource(R.drawable.ic_launcher);
+        }
         return view;
     }
 

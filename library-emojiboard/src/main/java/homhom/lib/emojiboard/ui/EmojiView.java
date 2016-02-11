@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -27,6 +29,8 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
     private int mId;
 
     private List<Emoji> mEmojis;
+
+    private View mCurrentView;
 
     private boolean mShowDelete = true;
 
@@ -83,6 +87,30 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
         }
     }
 
+    private void setOnTouchView(View view){
+        mCurrentView = view;
+    }
+
+    /**
+     * 显示Emoji的详细界面
+     * @param view
+     */
+    private void showEmojiDetail(View view){
+        Log.i("emoji-view","showEmojiDetail()");
+        hideEmojiDetail();
+        setOnTouchView(view);
+        Emoji emoji;
+        if(view.getTag() != null){
+            emoji = (Emoji) view.getTag();
+            Log.i("showEmoji",emoji.mName);
+        }
+    }
+
+    private void hideEmojiDetail(){
+        Log.i("emoji-view","hideEmojiDetail()");
+        setOnTouchView(null);
+    }
+
     public class EmojiViewAdapter extends RecyclerView.Adapter<EmojiViewAdapter.ViewHolder>{
 
         private Context mContext;
@@ -103,7 +131,9 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
                 try {
                     EmojiBoardFixer.getInstance().
                             getEmojiBoardConfiguration().
-                            getEmojiProvider().onShowDelete(holder.mView);
+                            getEmojiProvider().onShow(holder.mEmojiPicView,
+                            EmojiBoardFixer.getInstance().getEmojiManager().getDeleteBean());
+                    holder.mItemView.setTag(EmojiBoardFixer.getInstance().getEmojiManager().getDeleteBean());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -113,7 +143,8 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
                 try {
                     EmojiBoardFixer.getInstance().
                             getEmojiBoardConfiguration().
-                            getEmojiProvider().onShow(holder.mView,mEmojis.get(position));
+                            getEmojiProvider().onShow(holder.mEmojiPicView,mEmojis.get(position));
+                    holder.mItemView.setTag(mEmojis.get(position));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -126,14 +157,16 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
             return mEmojis == null ? 0 : (mShowDelete ? mEmojis.size() + 1: mEmojis.size());
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder{
+        public class ViewHolder extends RecyclerView.ViewHolder implements OnTouchListener,OnClickListener,OnLongClickListener{
 
-            private View mView;
+            private View mEmojiPicView;
+
+            private View mItemView;
 //            private TextView mTextView;
 
             public ViewHolder(RelativeLayout itemView) {
                 super(itemView);
-
+                mItemView = itemView;
                 ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT);
                 int size = EmojiBoardFixer.getInstance()
@@ -141,6 +174,9 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
                 layoutParams.height = size;
                 layoutParams.width = size;
                 itemView.setLayoutParams(layoutParams);
+                itemView.setOnClickListener(this);
+                itemView.setOnLongClickListener(this);
+                itemView.setOnTouchListener(this);
                 int itemSize = size - EmojiBoardFixer.getInstance()
                         .getEmojiViewManager().getViewPadding();
                 RelativeLayout.LayoutParams itemLayoutParams = new RelativeLayout.LayoutParams(
@@ -148,22 +184,46 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
                         itemSize);
                 itemLayoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
                 try {
-                    mView = EmojiBoardFixer.getInstance().
+                    mEmojiPicView = EmojiBoardFixer.getInstance().
                             getEmojiBoardConfiguration().
                             getEmojiProvider().
                             onCreateView(mContext,itemView);
-                    mView.setLayoutParams(EmojiBoardFixer.getInstance().
+                    mEmojiPicView.setLayoutParams(EmojiBoardFixer.getInstance().
                             getEmojiBoardConfiguration().
                             getEmojiProvider().
                             onSetLayoutParams(itemLayoutParams));
 //                    mView.setLayoutParams(layoutParams);
-                    itemView.addView(mView);
+                    itemView.addView(mEmojiPicView);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
 //                mView = (ImageView)itemView.findViewById(R.id.iv_emoji);
 
 //                mTextView = (TextView)itemView.findViewById(R.id.tv_emoji_id);
+            }
+
+            @Override
+            public void onClick(View v) {
+                Log.i("emoji-view","onClick");
+            }
+
+            @Override
+            public boolean onLongClick(View v) {
+                Log.i("emoji-view","onLongClick");
+                showEmojiDetail(v);
+                return false;
+            }
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_UP){
+                    if(mCurrentView != null){
+                        //说明是长按的弹起
+                        hideEmojiDetail();
+                        return true;
+                    }
+                }
+                return false;
             }
         }
     }

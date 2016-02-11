@@ -3,6 +3,7 @@ package homhom.lib.emojiboard.mgr;
 import java.util.ArrayList;
 
 import homhom.lib.emojiboard.R;
+import homhom.lib.emojiboard.bean.DeleteBean;
 import homhom.lib.emojiboard.bean.EmojiPacket;
 
 /**
@@ -14,7 +15,9 @@ public class EmojiManager extends BaseManager{
 
     public static final int TAG_DELETE_EMOJI = -1;
 
-    private int mDeleteEmojiRescouce;
+//    private int mDeleteEmojiRescouce;
+
+    private DeleteBean mDeleteBean;
 
     private ArrayList<EmojiPacket> mEmojiPackets;//用于存放读取的Emoji包
 
@@ -47,7 +50,7 @@ public class EmojiManager extends BaseManager{
             mEmojiDataChangerListeners = new ArrayList<EmojiDataChangerListener>();
         }
 
-        this.mDeleteEmojiRescouce = R.drawable.emoji_backspace;
+//        this.mDeleteEmojiRescouce = R.drawable.emoji_backspace;
 
     }
 
@@ -100,11 +103,22 @@ public class EmojiManager extends BaseManager{
         }
     }
 
-    public void setDeleteEmojiResouce(int res){
-        this.mDeleteEmojiRescouce = res;
+//    public void setDeleteEmojiResouce(int res){
+//        this.mDeleteEmojiRescouce = res;
+//    }
+//
+//    public int getDeleteEmojiResouce(){
+//        return this.mDeleteEmojiRescouce;
+//    }
+
+    private void setDeleteBean(DeleteBean deleteBean){
+        this.mDeleteBean = deleteBean;
     }
 
-    public int getDeleteEmojiResouce(){
-        return this.mDeleteEmojiRescouce;
+    public DeleteBean getDeleteBean(){
+        if(this.mDeleteBean == null){
+            return new DeleteBean();
+        }
+        return this.mDeleteBean;
     }
 }

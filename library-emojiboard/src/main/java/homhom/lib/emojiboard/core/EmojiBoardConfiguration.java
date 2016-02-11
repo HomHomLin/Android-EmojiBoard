@@ -2,6 +2,7 @@ package homhom.lib.emojiboard.core;
 
 import android.content.Context;
 
+import homhom.lib.emojiboard.R;
 import homhom.lib.emojiboard.core.parser.BaseEmojiPacketParser;
 import homhom.lib.emojiboard.core.parser.JsonEmojiPacketParser;
 
@@ -16,6 +17,7 @@ public class EmojiBoardConfiguration {
     public static String EMOJI_PACKET_PARSER_EXTENSIONS = "js";//后缀
     public static String EMOJI_PACKET_PRE_FIX = "hem_";//前缀
     public EmojiProvider mEmojiProvider;//解析提供器
+    private int mDeleteEmojiRescouce;
 
     private BaseEmojiPacketParser mBaseEmojiPacketParser;
 
@@ -40,6 +42,18 @@ public class EmojiBoardConfiguration {
     public EmojiBoardConfiguration setEmojiProvider(EmojiProvider emojiProvider){
         this.mEmojiProvider = emojiProvider;
         return build();
+    }
+
+    public EmojiBoardConfiguration setDeleteEmojiResouce(int res){
+        this.mDeleteEmojiRescouce = res;
+        return build();
+    }
+
+    public int getDeleteEmojiResouce(){
+        if(this.mDeleteEmojiRescouce == 0){
+            this.mDeleteEmojiRescouce = R.drawable.emoji_backspace;
+        }
+        return this.mDeleteEmojiRescouce;
     }
 
     /**

@@ -29,26 +29,20 @@ public class FrescoThumbnailView extends SimpleDraweeView {
 
     private DraweeController mController;
 
-    private Context mContext;
-
     public FrescoThumbnailView(Context context, GenericDraweeHierarchy hierarchy) {
         super(context, hierarchy);
-        mContext = context;
     }
 
     public FrescoThumbnailView(Context context) {
         super(context);
-        mContext = context;
     }
 
     public FrescoThumbnailView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mContext = context;
     }
 
     public FrescoThumbnailView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mContext = context;
     }
 
     private void setController(int resid){

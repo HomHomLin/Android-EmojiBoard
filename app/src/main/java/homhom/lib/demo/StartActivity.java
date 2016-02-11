@@ -39,6 +39,7 @@ public class StartActivity extends AppCompatActivity {
                 Builder(this).
                 setEmojiDirectory(Environment.getExternalStorageDirectory().getAbsolutePath()+"/emojiview/emoji/").
                 setEmojiProvider(new FrescoEmojiProvider()).
+                setDeleteEmojiResouce(R.mipmap.emoji_backspace).
                 build();
         EmojiBoardFixer.getInstance().initConfiguration(configuration);
     }

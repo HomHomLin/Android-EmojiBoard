@@ -12,7 +12,7 @@ public class EmojiViewManager extends BaseManager{
 
     private int mSpanCount = 5;//defalut = 5
 
-    private int mViewPading = 20;// Emojiview的表情大小控制padding
+    private int mViewPading = 60;// Emojiview的表情大小控制padding
 
     private int mBoardWidth,mBoardHeight;//面板的高度和宽度
 
