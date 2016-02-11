@@ -216,6 +216,10 @@ public class EmojiView extends RecyclerView implements EmojiManager.EmojiDataCha
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+//                if(v.getTag() != null){
+//                    Log.i("emoji-view",((Emoji)v.getTag()).mName);
+//
+//                }
                 if(event.getAction() == MotionEvent.ACTION_UP){
                     if(mCurrentView != null){
                         //说明是长按的弹起
