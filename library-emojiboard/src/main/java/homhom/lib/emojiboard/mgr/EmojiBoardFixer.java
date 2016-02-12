@@ -1,5 +1,7 @@
 package homhom.lib.emojiboard.mgr;
 
+import android.content.Context;
+
 import homhom.lib.emojiboard.core.EmojiBoardConfiguration;
 
 /**
@@ -46,6 +48,10 @@ public class EmojiBoardFixer extends BaseManager{
             throw new Exception("EmojiBoardConfiguration is null");
         }
         return this.mEmojiBoardConfiguration;
+    }
+
+    public Context getContext(){
+        return this.mEmojiBoardConfiguration.getContext();
     }
 
     public EmojiBoardFixer(){

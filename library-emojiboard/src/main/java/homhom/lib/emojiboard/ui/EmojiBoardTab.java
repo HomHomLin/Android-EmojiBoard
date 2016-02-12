@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.Typeface;
@@ -26,16 +27,18 @@ import android.widget.TextView;
 import java.util.Locale;
 
 import homhom.lib.emojiboard.R;
+import homhom.lib.emojiboard.bean.PacketInfo;
 
 /**
  * Created by linhomhom on 2015/8/10.
  */
 public class EmojiBoardTab extends HorizontalScrollView {
 
-    public interface EmojiIconTabProvider {
-        public int getPageIcon(int position);
-        public int getPageSelectIcon(int position);
-        public String getPageIconText(int position);
+    public interface EmojiTabListener{
+        public View onCreateTabView(int position, ViewGroup parent);
+        //    public View getPageIcon(int position, PacketInfo info, View view);
+        public boolean getPageIconTextVisible(int position);
+        public String getPageIconText(int position,View view);
     }
 
     // @formatter:off
@@ -130,7 +133,7 @@ public class EmojiBoardTab extends HorizontalScrollView {
         TypedArray a = context.obtainStyledAttributes(attrs, ATTRS);
 
         tabTextSize = a.getDimensionPixelSize(0, tabTextSize);
-        tabTextColor = a.getColor(1, tabTextColor);
+//        tabTextColor = a.getColor(1, tabTextColor);
 
         a.recycle();
 
@@ -196,8 +199,8 @@ public class EmojiBoardTab extends HorizontalScrollView {
 
         for (int i = 0; i < tabCount; i++) {
 
-            if (pager.getAdapter() instanceof EmojiIconTabProvider) {
-                addIconTab(i, ((EmojiIconTabProvider) pager.getAdapter()).getPageIcon(i), ((EmojiIconTabProvider) pager.getAdapter()).getPageIconText(i));
+            if (pager.getAdapter() instanceof EmojiTabListener) {
+                addIconTab(i, (EmojiTabListener) pager.getAdapter());
             } else {
 //                addIconTab(i, R.drawable.home_categry_icon_n, pager.getAdapter().getPageTitle(i).toString());
 
@@ -263,6 +266,7 @@ public class EmojiBoardTab extends HorizontalScrollView {
         dot_layout.addView(dot);
 
         tab.addView(txt);
+        tab.setTag(txt);
         tab.addView(dot_layout);
         dot_layout.setVisibility(View.INVISIBLE);
         tabsContainer.addView(tab);
@@ -281,7 +285,7 @@ public class EmojiBoardTab extends HorizontalScrollView {
         dot_layout.setVisibility(View.INVISIBLE);
     }
 
-    private void addIconTab(final int position, int resId, String text) {
+    private void addIconTab(final int position, EmojiTabListener tabProvider) {
 
         LinearLayout tab = new LinearLayout(getContext());
         tab.setOrientation(LinearLayout.HORIZONTAL);
@@ -294,16 +298,41 @@ public class EmojiBoardTab extends HorizontalScrollView {
             }
         });
 
-        TextView txt = new TextView(getContext());
-        txt.setText(text);
-        txt.setFocusable(true);
-        txt.setGravity(Gravity.CENTER);
-        txt.setSingleLine();
+        if(tabProvider.getPageIconTextVisible(position)){
+            //如果要求有文字
+            LinearLayout icon = new LinearLayout(getContext());
+            icon.setOrientation(LinearLayout.VERTICAL);
+            icon.setGravity(Gravity.CENTER);
+            icon.setFocusable(true);
+
+            View view = tabProvider.onCreateTabView(position,icon);
+            if(view != null){
+                view.setLayoutParams(new LinearLayout.LayoutParams(500,500));
+                view.setFocusable(true);
+            }
 
 
-        if (resId != 0) {
-            txt.setCompoundDrawablesWithIntrinsicBounds(0, resId, 0, 0);
+            TextView txt = new TextView(getContext());
+            txt.setText(tabProvider.getPageIconText(position,txt));
+            txt.setFocusable(true);
+            txt.setGravity(Gravity.CENTER);
+            txt.setSingleLine();
+
+            icon.addView(view);
+            icon.addView(txt);
+
+            tab.addView(txt);
+
+            tab.setTag(txt);
+        }else{
+            View view = tabProvider.onCreateTabView(position,tab);
+            if(view != null){
+                view.setFocusable(true);
+            }
+
+            tab.addView(view);
         }
+
 
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(getResources().getDimensionPixelSize(R.dimen.emoji_dot_wh), getResources().getDimensionPixelSize(R.dimen.emoji_dot_wh));
@@ -317,7 +346,6 @@ public class EmojiBoardTab extends HorizontalScrollView {
         dot_layout.setLayoutParams(layoutParams2);
         dot_layout.addView(dot);
 
-        tab.addView(txt);
         tab.addView(dot_layout);
         dot_layout.setVisibility(View.INVISIBLE);
         tabsContainer.addView(tab);
@@ -363,18 +391,20 @@ public class EmojiBoardTab extends HorizontalScrollView {
             if (v instanceof LinearLayout) {
 
                 LinearLayout tab = (LinearLayout) v;
-                TextView tv = (TextView)tab.getChildAt(0);
-                tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
-                tv.setTypeface(tabTypeface, tabTypefaceStyle);
-                tv.setTextColor(tabTextColor);
+                if(tab.getTag() != null) {
+                    TextView tv = (TextView) tab.getTag();
+                    tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, tabTextSize);
+                    tv.setTypeface(tabTypeface, tabTypefaceStyle);
+                    tv.setTextColor(tabTextColor);
 
-                // setAllCaps() is only available from API 14, so the upper case is made manually if we are on a
-                // pre-ICS-build
-                if (textAllCaps) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-                        tv.setAllCaps(true);
-                    } else {
-                        tv.setText(tv.getText().toString().toUpperCase(locale));
+                    // setAllCaps() is only available from API 14, so the upper case is made manually if we are on a
+                    // pre-ICS-build
+                    if (textAllCaps) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                            tv.setAllCaps(true);
+                        } else {
+                            tv.setText(tv.getText().toString().toUpperCase(locale));
+                        }
                     }
                 }
             }
@@ -596,16 +626,24 @@ public class EmojiBoardTab extends HorizontalScrollView {
         for (int i = 0; i < tabsContainer.getChildCount(); i++) {
             if (i == position) {
                 LinearLayout linearLayout = ((LinearLayout) tabsContainer.getChildAt(i));
-                ((TextView) linearLayout.getChildAt(0)).setTextColor(tabTextSelectColor);
-                if (pager.getAdapter() instanceof EmojiIconTabProvider) {
-                    ((TextView) linearLayout.getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, ((EmojiIconTabProvider) pager.getAdapter()).getPageSelectIcon(i), 0, 0);
+                if(linearLayout.getTag() != null) {
+                    ((TextView) linearLayout.getTag()).setTextColor(tabTextSelectColor);
+                }
+                if (pager.getAdapter() instanceof EmojiTabListener) {
+                    //被选中状态
+                    //Todo:添加；一个背景变色的功能，选中这里背景就变色
+//                    ((TextView) linearLayout.getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, ((EmojiIconTabProvider) pager.getAdapter()).getPageSelectIcon(i), 0, 0);
                 }
 //                    ((TextView) linearLayout.getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home_categry_icon_f_n, 0, 0);
             } else {
                 LinearLayout linearLayout = ((LinearLayout) tabsContainer.getChildAt(i));
-                ((TextView) linearLayout.getChildAt(0)).setTextColor(tabTextColor);
-                if (pager.getAdapter() instanceof EmojiIconTabProvider) {
-                    ((TextView) linearLayout.getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, ((EmojiIconTabProvider) pager.getAdapter()).getPageIcon(i), 0, 0);
+                if(linearLayout.getTag() != null) {
+                    ((TextView) linearLayout.getTag()).setTextColor(tabTextColor);
+                }
+                if (pager.getAdapter() instanceof EmojiTabListener) {
+                    //取消选中状态
+                    //Todo:添加
+//                    ((TextView) linearLayout.getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, ((EmojiIconTabProvider) pager.getAdapter()).getPageIcon(i), 0, 0);
                 }
 //                    ((TextView) linearLayout.getChildAt(0)).setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.home_categry_icon_n, 0, 0);
 

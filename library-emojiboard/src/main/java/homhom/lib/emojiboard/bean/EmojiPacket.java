@@ -9,9 +9,7 @@ public class EmojiPacket extends BaseBean{
 
     public int mColumn;//表情所展现的列数
 
-    public String mPacketName;//表情包名字
-
-    public String mPacketIcon;//表情包图标
+    public PacketInfo mPacketInfo;
 
     public ArrayList<Emoji> mEmojis;//表情
 
@@ -20,9 +18,10 @@ public class EmojiPacket extends BaseBean{
     public EmojiPacket(){
         mColumn = 5;//default
         mId = 0;
-        mPacketName = "";
-        mPacketIcon = "";
         mShowDelete = true;
+        if(mPacketInfo == null){
+            mPacketInfo = new PacketInfo();
+        }
         if(mEmojis == null){
             mEmojis = new ArrayList<>();
         }
@@ -32,8 +31,10 @@ public class EmojiPacket extends BaseBean{
     public void release() {
         mColumn = 0;
         mId = 0;
-        mPacketName = null;
-        mPacketIcon = null;
+        if(mPacketInfo != null){
+            mPacketInfo.release();
+            mPacketInfo = null;
+        }
         if(mEmojis != null){
             mEmojis.clear();
             mEmojis = null;

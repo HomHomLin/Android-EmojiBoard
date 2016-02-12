@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
             emojiPacket.mColumn = 4;
             emojiPacket.mId = 1;
             emojiPacket.mShowDelete = true;
-            emojiPacket.mPacketName = x + "";
+            emojiPacket.mPacketInfo.mPacketName = x + "";
             ArrayList<Emoji> list = new ArrayList<>();
             for (int i = 0; i < 15 * (x + 1); i++) {
                 Emoji emoji = new Emoji();

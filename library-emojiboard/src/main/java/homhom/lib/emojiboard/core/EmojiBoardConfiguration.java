@@ -16,7 +16,8 @@ public class EmojiBoardConfiguration {
     public static String EMOJI_PACKET_EXTENSIONS = "hem";//后缀
     public static String EMOJI_PACKET_PARSER_EXTENSIONS = "js";//后缀
     public static String EMOJI_PACKET_PRE_FIX = "hem_";//前缀
-    public EmojiProvider mEmojiProvider;//解析提供器
+    private EmojiProvider mEmojiProvider;//解析提供器
+    private EmojiTabProvider mEmojiTabProvider;//Tab解析器
     private int mDeleteEmojiRescouce;
 
     private BaseEmojiPacketParser mBaseEmojiPacketParser;
@@ -27,6 +28,10 @@ public class EmojiBoardConfiguration {
 
     public static EmojiProvider DefaultEmojiProvider(){
         return new BaseEmojiProvider();
+    }
+
+    public static EmojiTabProvider DefaultEmojiTabProvider(){
+        return new BaseEmojiTabProvider();
     }
 
     public static EmojiBoardConfiguration Builder(Context context){
@@ -41,6 +46,11 @@ public class EmojiBoardConfiguration {
 
     public EmojiBoardConfiguration setEmojiProvider(EmojiProvider emojiProvider){
         this.mEmojiProvider = emojiProvider;
+        return build();
+    }
+
+    public EmojiBoardConfiguration setEmojiTabProvider(EmojiTabProvider emojiTabProvider){
+        this.mEmojiTabProvider = emojiTabProvider;
         return build();
     }
 
@@ -86,6 +96,13 @@ public class EmojiBoardConfiguration {
             this.mEmojiProvider = EmojiBoardConfiguration.DefaultEmojiProvider();
         }
         return this.mEmojiProvider;
+    }
+
+    public EmojiTabProvider getEmojiTabProvider(){
+        if(this.mEmojiTabProvider == null){
+            this.mEmojiTabProvider = EmojiBoardConfiguration.DefaultEmojiTabProvider();
+        }
+        return this.mEmojiTabProvider;
     }
 
     public static EmojiBoardConfiguration build(){

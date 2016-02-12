@@ -62,10 +62,10 @@ public class JsonEmojiPacketParser extends BaseEmojiPacketParser{
             emojiPacket.mColumn = obj.getInt("column");
         }
         if(obj.has("packetName")){
-            emojiPacket.mPacketName = obj.getString("packetName");
+            emojiPacket.mPacketInfo.mPacketName = obj.getString("packetName");
         }
         if(obj.has("packetIcon")){
-            emojiPacket.mPacketIcon = obj.getString("packetIcon");
+            emojiPacket.mPacketInfo.mPacketIcon = obj.getString("packetIcon");
         }
 
         if(obj.has("showDelete")){

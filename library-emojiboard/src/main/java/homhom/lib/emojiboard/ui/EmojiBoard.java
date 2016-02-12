@@ -261,6 +261,10 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
 //        }
     }
 
+    public EmojiBoardTab getEmojiBoardTab(){
+        return this.mEmojiTab;
+    }
+
     public void updateIndicatorStatus(int pagerId, int position){
         if(pagerId != mCurrentItem){
             //不是当前的item

@@ -78,9 +78,9 @@ public class XmlEmojiPacketParser extends BaseEmojiPacketParser{
                 }else if(mContent.equals("column")){
                     mEmojiPacket.mColumn = Integer.parseInt(data);
                 }else if(mContent.equals("packetName")){
-                    mEmojiPacket.mPacketName = data;
+                    mEmojiPacket.mPacketInfo.mPacketName = data;
                 }else if(mContent.equals("packetIcon")){
-                    mEmojiPacket.mPacketIcon = data;
+                    mEmojiPacket.mPacketInfo.mPacketIcon = data;
                 }else if(mContent.equals("showDelete")){
                     mEmojiPacket.mShowDelete = Boolean.parseBoolean(data);
                 }

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import homhom.lib.emojiboard.R;
 import homhom.lib.emojiboard.bean.EmojiPacket;
+import homhom.lib.emojiboard.core.EmojiTabProvider;
 import homhom.lib.emojiboard.mgr.EmojiBoardFixer;
 
 /**
@@ -23,6 +24,8 @@ public class EmojiPagerBoard extends BaseViewPager{
     private int mBoardPagerSize;
 
     private EmojiPagerBoardAdapter mEmojiPagerBoardAdapter;
+
+    private EmojiTabProvider mEmojiTabProvider;
 
     private ArrayList<EmojiViewPager> mEmojiViewPagers;
 
@@ -50,6 +53,12 @@ public class EmojiPagerBoard extends BaseViewPager{
         }
 
         mEmojiPackets = EmojiBoardFixer.getInstance().getEmojiManager().getEmojiPackets();
+
+        try {
+            mEmojiTabProvider = EmojiBoardFixer.getInstance().getEmojiBoardConfiguration().getEmojiTabProvider();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         setupEmojiBoard(mEmojiPackets);
     }
@@ -117,7 +126,7 @@ public class EmojiPagerBoard extends BaseViewPager{
         }
     }
 
-    class EmojiPagerBoardAdapter extends PagerAdapter implements EmojiBoardTab.EmojiIconTabProvider {
+    class EmojiPagerBoardAdapter extends PagerAdapter implements EmojiBoardTab.EmojiTabListener {
 
         @Override
         public int getCount() {
@@ -162,18 +171,20 @@ public class EmojiPagerBoard extends BaseViewPager{
         }
 
         @Override
-        public int getPageIcon(int position) {
-            return R.drawable.ic_launcher;
+        public View onCreateTabView(int position, ViewGroup parent) {
+            return mEmojiTabProvider == null ? null : mEmojiTabProvider.onCreateTabView(position,parent,mEmojiPackets.get(position).mPacketInfo);
         }
 
         @Override
-        public int getPageSelectIcon(int position) {
-            return R.drawable.ic_launcher;
+        public boolean getPageIconTextVisible(int position) {
+            return false;
+//            return mEmojiTabProvider == null ? true : mEmojiTabProvider.getPageIconTextVisible(position);
+
         }
 
         @Override
-        public String getPageIconText(int position) {
-            return mEmojiPackets == null ? "" : mEmojiPackets.get(position).mPacketName;
+        public String getPageIconText(int position, View view) {
+            return mEmojiTabProvider == null ? null : mEmojiTabProvider.getPageIconText(position,view,mEmojiPackets.get(position).mPacketInfo);
         }
     }
 }
