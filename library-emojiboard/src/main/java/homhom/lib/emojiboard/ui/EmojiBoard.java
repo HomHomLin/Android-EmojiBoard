@@ -5,6 +5,7 @@ import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 
 import homhom.lib.emojiboard.R;
 import homhom.lib.emojiboard.bean.EmojiPacket;
+import homhom.lib.emojiboard.core.EmojiPagerBoardProvider;
 import homhom.lib.emojiboard.mgr.EmojiBoardFixer;
 
 /**
@@ -28,6 +30,8 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
     private EmojiBoardTab mEmojiTab;
 
     private ArrayList<EmojiPacket> mEmojiPackets;
+
+    private EmojiPagerBoardProvider mEmojiPagerBoardProvider;
 
     private boolean mIsAddEmojiPagerBoard = false;
     private boolean mIsAddIndicatorLayout = false;
@@ -76,6 +80,11 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
             mEmojiPagerBoard.setEmojiPackets(this.mEmojiPackets);
 //            mEmojiPagerBoard.addOnPageChangeListener(mEmojiBoardOnPageChangeListener);
         }
+        this.mEmojiTab.notifyDataSetChanged();
+    }
+
+    public void setEmojiPagerBoardProvider(EmojiPagerBoardProvider emojiPagerBoardProvider){
+        this.mEmojiPagerBoardProvider = emojiPagerBoardProvider;
     }
 
     public EmojiPagerBoard getEmojiViewBoard(){
@@ -110,15 +119,17 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
     private void addEmojiPagerBoard(){
         if(mEmojiPagerBoard == null){
             mEmojiPagerBoard = new EmojiPagerBoard(getContext());
+
+            mEmojiPagerBoard.setOnEmojiViewPagerStatusListener(this);
+            mEmojiPagerBoard.setOnEmojiPagerBoardStatusListener(this);
+
+            mEmojiPagerBoard.initEmojiBoard();
         }
 
         if(mIsAddEmojiPagerBoard){
             return;
         }
 
-
-        mEmojiPagerBoard.setOnEmojiViewPagerStatusListener(this);
-        mEmojiPagerBoard.setOnEmojiPagerBoardStatusListener(this);
 //        setupEmojiViewPager();
 
 //        mEmojiPagerBoard.setNoFocus(true);//如果内部的view的页数大于 1 页，静止滑动
@@ -198,9 +209,9 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
 //        setupEmojiIndicator();
     }
 
-    public EmojiViewPager getViewPager(int item){
+    public View getViewPager(int item){
         if(mEmojiPagerBoard != null) {
-            EmojiViewPager viewPager = mEmojiPagerBoard.getEmojiViewPager(item);
+            View viewPager = mEmojiPagerBoard.getEmojiViewPager(item);
             return viewPager;
         }
 
@@ -208,17 +219,17 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
     }
 
     public int getViewPagerCurrentItem(int item){
-        EmojiViewPager emojiViewPager = getViewPager(item);
-        if(emojiViewPager != null){
-            return emojiViewPager.getCurrentItem();
+        View emojiViewPager = getViewPager(item);
+        if(emojiViewPager instanceof EmojiViewPager && emojiViewPager != null){
+            return ((EmojiViewPager)emojiViewPager).getCurrentItem();
         }
         return 0;
     }
 
     public int getViewPagerPageSize(int item){
-        EmojiViewPager viewPager = getViewPager(item);
-        if(viewPager != null){
-            return viewPager.getPagerSize();
+        View viewPager = getViewPager(item);
+        if(viewPager instanceof EmojiViewPager && viewPager != null){
+            return ((EmojiViewPager)viewPager).getPagerSize();
             //显示indicator
         }
         return  PAGE_ITEM_NONE;
@@ -288,7 +299,9 @@ public class EmojiBoard extends RelativeLayout implements EmojiViewPager.OnEmoji
 
     @Override
     public void onInit(int pagerId) {
-
+        if(this.mEmojiPagerBoardProvider != null && this.mEmojiPagerBoard != null){
+            this.mEmojiPagerBoard.setEmojiPagerBoardProvider(this.mEmojiPagerBoardProvider);
+        }
     }
 
     @Override

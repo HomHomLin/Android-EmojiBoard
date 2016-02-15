@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import homhom.lib.emojiboard.R;
 import homhom.lib.emojiboard.bean.EmojiPacket;
+import homhom.lib.emojiboard.core.EmojiPagerBoardProvider;
 import homhom.lib.emojiboard.core.EmojiTabProvider;
 import homhom.lib.emojiboard.mgr.EmojiBoardFixer;
 
@@ -27,7 +28,9 @@ public class EmojiPagerBoard extends BaseViewPager{
 
     private EmojiTabProvider mEmojiTabProvider;
 
-    private ArrayList<EmojiViewPager> mEmojiViewPagers;
+    private ArrayList<View> mEmojiViewPagers;
+
+    private EmojiPagerBoardProvider mEmojiPagerBoardProvider;
 
     private EmojiViewPager.OnEmojiViewPagerStatusListener mOnEmojiViewPagerStatusListener;
 
@@ -43,7 +46,6 @@ public class EmojiPagerBoard extends BaseViewPager{
 
     public EmojiPagerBoard(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initEmojiBoard();
     }
 
     public void initEmojiBoard(){
@@ -71,14 +73,22 @@ public class EmojiPagerBoard extends BaseViewPager{
         this.mOnEmojiPagerBoardStatusListener = listener;
     }
 
+    public void setEmojiPagerBoardProvider(EmojiPagerBoardProvider emojiPagerBoardProvider){
+        this.mEmojiPagerBoardProvider = emojiPagerBoardProvider;
+    }
 
-    public EmojiViewPager getEmojiViewPager(int pagerId){
+
+    public View getEmojiViewPager(int pagerId){
         if(mEmojiViewPagers == null){
             return null;
         }
         return mEmojiViewPagers.get(pagerId);
     }
 
+    /**
+     * 增加几个viewpager
+     * @param emojiPackets
+     */
     public void setupEmojiBoard(ArrayList<EmojiPacket> emojiPackets){
 
         this.mEmojiPackets = emojiPackets;
@@ -89,12 +99,29 @@ public class EmojiPagerBoard extends BaseViewPager{
             mBoardPagerSize = 0;
         }
 
+        if(mEmojiViewPagers != null){
+            mEmojiViewPagers.clear();
+        }else{
+            mEmojiViewPagers = new ArrayList<>();
+        }
+
         ViewGroup.LayoutParams layoutParams =
                 new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.MATCH_PARENT);
 
         for(int i = 0 ; i < mBoardPagerSize; i ++){
+
+            if(mEmojiPagerBoardProvider != null){
+                View view =
+                        mEmojiPagerBoardProvider.onCreatePagerView(i,this,this.mEmojiPackets.get(i));
+                if(view != null){
+                    view.setLayoutParams(layoutParams);
+                    mEmojiViewPagers.add(view);
+                    continue;
+                }
+            }
+
             EmojiViewPager emojiViewPager = new EmojiViewPager(getContext());
 
             emojiViewPager.setPagerId(i);
@@ -113,13 +140,17 @@ public class EmojiPagerBoard extends BaseViewPager{
         }
 
         this.setOffscreenPageLimit(mBoardPagerSize);
+
+        mEmojiPagerBoardAdapter.setAdapterEmojiPackets(this.mEmojiPackets);
+        mEmojiPagerBoardAdapter.setAdapterEmojiViewPagers(this.mEmojiViewPagers);
+
+        mEmojiPagerBoardAdapter.notifyDataSetChanged();
+
     }
 
     public void setEmojiPackets(ArrayList<EmojiPacket> emojiPackets){
 
         setupEmojiBoard(emojiPackets);
-
-        mEmojiPagerBoardAdapter.notifyDataSetChanged();
 
         if(this.mOnEmojiPagerBoardStatusListener != null) {
             this.mOnEmojiPagerBoardStatusListener.onSetEmojiPacket();
@@ -128,9 +159,29 @@ public class EmojiPagerBoard extends BaseViewPager{
 
     class EmojiPagerBoardAdapter extends PagerAdapter implements EmojiBoardTab.EmojiTabListener {
 
+        private ArrayList<View> mAdapterEmojiViewPagers;
+
+        private ArrayList<EmojiPacket> mAdapterEmojiPackets;
+
+        public void setAdapterEmojiViewPagers(ArrayList<View> list){
+            if(mAdapterEmojiViewPagers == null){
+                mAdapterEmojiViewPagers = new ArrayList<>();
+            }
+            mAdapterEmojiViewPagers.clear();
+            mAdapterEmojiViewPagers.addAll(list);
+        }
+
+        public void setAdapterEmojiPackets(ArrayList<EmojiPacket> list){
+            if(mAdapterEmojiPackets == null){
+                mAdapterEmojiPackets = new ArrayList<>();
+            }
+            mAdapterEmojiPackets.clear();
+            mAdapterEmojiPackets.addAll(list);
+        }
+
         @Override
         public int getCount() {
-            return mEmojiViewPagers == null ? 0 : mEmojiViewPagers.size();
+            return mAdapterEmojiViewPagers == null ? 0 : mAdapterEmojiViewPagers.size();
         }
 
         @Override
@@ -141,20 +192,24 @@ public class EmojiPagerBoard extends BaseViewPager{
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
 
-            if(mEmojiViewPagers == null){
+            if(mAdapterEmojiViewPagers == null){
                 return null;
             }
-            if(position >= mEmojiViewPagers.size()){
+            if(position >= mAdapterEmojiViewPagers.size()){
                 return null;
             }
 
-            EmojiViewPager emojiViewPager = mEmojiViewPagers.get(position);
+            View view = mAdapterEmojiViewPagers.get(position);
 
-            emojiViewPager.setEmojiPacket(mEmojiPackets.get(position));
+            if(view instanceof EmojiViewPager){
+                EmojiViewPager emojiViewPager = (EmojiViewPager)view;
+                emojiViewPager.setEmojiPacket(mAdapterEmojiPackets.get(position));
+            }
 
-            container.addView(emojiViewPager);
 
-            return emojiViewPager;
+            container.addView(view);
+
+            return view;
         }
 
         @Override
@@ -163,16 +218,16 @@ public class EmojiPagerBoard extends BaseViewPager{
                 return;
             }
 
-            if(position >= mEmojiViewPagers.size()){
+            if(position >= mAdapterEmojiViewPagers.size()){
                 return;
             }
 
-            container.removeView(mEmojiViewPagers.get(position));
+            container.removeView(mAdapterEmojiViewPagers.get(position));
         }
 
         @Override
         public View onCreateTabView(int position, ViewGroup parent) {
-            return mEmojiTabProvider == null ? null : mEmojiTabProvider.onCreateTabView(position,parent,mEmojiPackets.get(position).mPacketInfo);
+            return mEmojiTabProvider == null ? null : mEmojiTabProvider.onCreateTabView(position,parent,mAdapterEmojiPackets.get(position).mPacketInfo);
         }
 
         @Override
@@ -184,7 +239,7 @@ public class EmojiPagerBoard extends BaseViewPager{
 
         @Override
         public String getPageIconText(int position, View view) {
-            return mEmojiTabProvider == null ? null : mEmojiTabProvider.getPageIconText(position,view,mEmojiPackets.get(position).mPacketInfo);
+            return mEmojiTabProvider == null ? null : mEmojiTabProvider.getPageIconText(position,view,mAdapterEmojiPackets.get(position).mPacketInfo);
         }
     }
 }

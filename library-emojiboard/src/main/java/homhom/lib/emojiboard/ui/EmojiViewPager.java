@@ -19,16 +19,11 @@ import homhom.lib.emojiboard.util.EmojiPacketUtil;
 /**
  * Created by Linhh on 16/1/1.
  */
-public class EmojiViewPager extends BaseViewPager
+public class EmojiViewPager extends BaseEmojiViewPager
         implements ViewTreeObserver.OnGlobalLayoutListener{
 
 //    private ArrayList<EmojiView> mEmojiViews;
-    private int mPagerId;
     private EmojiPacket mEmojiPacket;
-    private int mEmojiPacketColumn;
-    private int mEmojiPacketId;
-    private int mPagerSize;
-    private int mPagerItemSize;//内部每个pager的item数量
     private boolean mShowDelete;
     private EmojiViewPagerAdapter mAdapter;
     private HashMap<Integer, List<Emoji>> mViewPagerDataList;
@@ -81,38 +76,6 @@ public class EmojiViewPager extends BaseViewPager
 
     public void setOnEmojiViewPagerStatusListener(OnEmojiViewPagerStatusListener listener){
         this.mOnEmojiViewPagerStatusListener = listener;
-    }
-
-    public int getEmojiPacketColum(){
-        return this.mEmojiPacketColumn;
-    }
-
-    public int getEmojiPacketId(){
-        return this.mEmojiPacketId;
-    }
-
-    /**
-     * 获得每个Pager页面内的item数量
-     * @return
-     */
-    public int getPagerItemSize(){
-        return this.mPagerItemSize;
-    }
-
-    /**
-     * 获得该viewpager下的pager页数
-     * @return
-     */
-    public int getPagerSize(){
-        return this.mPagerSize;
-    }
-
-    public int getPagerId(){
-        return this.mPagerId;
-    }
-
-    public void setPagerId(int id){
-        this.mPagerId = id;
     }
 
     public void setEmojiPacket(EmojiPacket emojipacket){
